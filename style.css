@@ -13,6 +13,7 @@
     --link-hover-color: var(--secondary-color); /* Color de enlace al pasar el ratón */
     --footer-bg: #b2ebf2; /* Fondo del footer */
     --footer-text: var(--primary-color); /* Color del texto del footer */
+    --accent-color: #004d40; /* Un color de acento, aquí usando el primario */
 }
 
 /* Desplazamiento suave para anclajes */
@@ -26,7 +27,7 @@ body {
     padding: 0;
     background-color: var(--background-light);
     color: var(--text-color);
-    line-height: 1.6; /* Mejora la legibilidad */
+    line-height: 1.7; /* Mejora la legibilidad */
 }
 
 header {
@@ -42,8 +43,15 @@ header {
     z-index: 1000;
     box-shadow: 0 3px 8px rgba(0,0,0,0.2); /* Sombra mejorada */
     box-sizing: border-box;
-    transition: background-color 0.3s ease; /* Transición para posible cambio de color al scroll */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición para cambios al scroll */
 }
+
+/* Estilo para el header cuando se hace scroll */
+header.scrolled {
+    background-color: rgba(178, 235, 242, 0.95); /* Un poco más opaco al hacer scroll */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra más pronunciada */
+}
+
 
 header h1 {
     margin: 0;
@@ -78,8 +86,10 @@ header h1 {
     box-shadow: -4px 0 8px rgba(0,0,0,0.2); /* Sombra mejorada */
     z-index: 1001;
     opacity: 0.98;
-    display: flex; /* Usar flexbox para los enlaces */
+    display: flex; /* Usar flexbox para los enlaces y los iconos de contacto */
     flex-direction: column;
+    justify-content: space-between; /* Espacio entre los elementos y los iconos de contacto */
+    padding-bottom: 20px; /* Añade un poco de padding abajo */
 }
 
 .sidebar a {
@@ -110,6 +120,30 @@ header h1 {
     color: var(--secondary-color);
 }
 
+/* Estilos para los iconos de contacto en el sidebar */
+.sidebar-contact-icons {
+    margin-top: auto; /* Empuja este div hacia abajo */
+    padding: 20px 25px;
+    display: flex;
+    justify-content: center; /* Centra los iconos */
+    gap: 15px; /* Espacio entre los iconos */
+    border-top: 1px solid var(--border-color); /* Separador visual */
+}
+
+.sidebar-contact-icons a {
+     /* Sobrescribe padding y display de .sidebar a */
+    padding: 0;
+    display: inline-block;
+    font-size: 28px; /* Tamaño grande para los iconos */
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.sidebar-contact-icons a:hover {
+    color: var(--secondary-color);
+    background-color: transparent; /* Asegura que no tenga fondo al pasar el ratón */
+}
+
 
 .content {
     margin-top: 100px; /* Ajusta según la altura de tu header */
@@ -133,12 +167,11 @@ section:hover {
 }
 
 /* FIX para el anclaje con cabecera fija */
-/* AJUSTE FINO PARA EL DESPLAZAMIENTO */
 section::before {
     content: "";
     display: block;
-    height: 110px; /* <-- AJUSTE A 110px */
-    margin-top: -110px; /* <-- AJUSTE A -110px */
+    height: 110px; /* Ajusta según la altura de tu header */
+    margin-top: -110px; /* Ajusta según la altura de tu header */
     visibility: hidden;
     pointer-events: none;
 }
@@ -150,7 +183,7 @@ h2 {
     margin-bottom: 25px; /* Aumenta el margen inferior */
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 2.2rem; /* Tamaño de fuente ligeramente mayor */
+    font-size: 2.4rem; /* Tamaño de fuente ligeramente mayor */
 }
 
 h3 {
@@ -159,17 +192,23 @@ h3 {
     margin-bottom: 15px; /* Más espacio inferior */
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 1.7rem; /* Tamaño de fuente ligeramente mayor */
+    font-size: 1.8rem; /* Tamaño de fuente ligeramente mayor */
+}
+
+p {
+    margin-bottom: 15px;
+    line-height: 1.7; /* Consistencia con el body */
 }
 
 ul {
     list-style: none;
     padding: 0;
+    margin-bottom: 20px; /* Espacio después de las listas */
 }
 
 li {
-    margin-bottom: 15px; /* Aumenta el espacio entre items */
-    line-height: 1.7; /* Mejora la legibilidad */
+    margin-bottom: 12px; /* Espacio entre items */
+    line-height: 1.6; /* Mejora la legibilidad */
     position: relative;
     padding-left: 25px; /* Espacio para el bullet personalizado */
 }
@@ -184,9 +223,11 @@ li::before {
     position: absolute;
     left: 0;
     top: 0;
+    font-size: 1.2em; /* Tamaño del bullet */
+    line-height: 1.6; /* Alinea con el texto */
 }
 
-/* Estilos para los enlaces dentro de las secciones */
+/* Estilos para los enlaces de texto genéricos dentro de las secciones (si existen) */
 section a {
     color: var(--link-color);
     text-decoration: none;
@@ -199,10 +240,46 @@ section a:hover {
     border-bottom-color: var(--link-hover-color);
 }
 
-/* Estilos para iconos */
-.fas, .fab {
-    margin-right: 8px; /* Espacio a la derecha de los iconos */
-    color: var(--secondary-color); /* Color para los iconos */
+/* Estilos para la sección de Información Personal con foto */
+.personal-content {
+    display: flex;
+    flex-direction: column; /* Por defecto en columna */
+    align-items: center;
+    gap: 30px; /* Espacio entre texto y foto */
+}
+
+.personal-text {
+    flex-grow: 1;
+}
+
+.personal-photo img {
+    max-width: 200px; /* Tamaño máximo de la foto */
+    height: auto;
+    border-radius: 50%; /* Forma redonda */
+    border: 5px solid var(--border-color); /* Borde alrededor de la foto */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra sutil */
+}
+
+/* Estilos para los iconos de contacto en la sección principal */
+.contact-icons-main {
+    display: flex;
+    gap: 20px; /* Espacio entre los iconos */
+    justify-content: center; /* Centra los iconos */
+    margin-top: 20px; /* Espacio arriba */
+}
+
+.contact-icons-main a {
+    text-decoration: none; /* Quita el subrayado */
+    color: var(--primary-color); /* Color del icono */
+    font-size: 36px; /* Tamaño grande para los iconos */
+    transition: color 0.3s ease, transform 0.3s ease; /* Transición suave */
+    border-bottom: none; /* Asegura que no tengan borde inferior */
+}
+
+.contact-icons-main a:hover {
+    color: var(--secondary-color); /* Color al pasar el ratón */
+    transform: scale(1.1); /* Ligero aumento de tamaño al pasar el ratón */
+    border-bottom: none; /* Asegura que no tengan borde inferior al pasar el ratón */
 }
 
 
@@ -212,17 +289,39 @@ footer {
     margin-top: 50px; /* Más espacio superior */
     background-color: var(--footer-bg);
     color: var(--footer-text);
-    font-size: 1rem; /* Tamaño de fuente ligeramente mayor */
+    font-size: 1.1rem; /* Tamaño de fuente ligeramente mayor */
 }
 
 /* Media query para hacerlo más responsive */
+@media (min-width: 769px) {
+    /* En pantallas más grandes, ponemos la foto a un lado */
+    .personal-content {
+        flex-direction: row; /* En fila en pantallas grandes */
+        align-items: flex-start; /* Alinea arriba */
+    }
+
+    .personal-photo {
+        flex-shrink: 0; /* Evita que la foto se achique */
+        margin-left: 30px; /* Espacio a la izquierda de la foto */
+    }
+
+    /* Asegura que los iconos de contacto en la sección principal no se centren en desktop si el contenido no lo está */
+    .contact-icons-main {
+         justify-content: flex-start;
+    }
+}
+
+
 @media (max-width: 768px) {
     header h1 {
         font-size: 22px;
     }
+     header.scrolled {
+        background-color: rgba(178, 235, 242, 0.98); /* Un poco más opaco al hacer scroll en móvil */
+     }
     .content {
         padding: 15px;
-        margin-top: 100px; /* Asegura que haya espacio para el header */
+        margin-top: 90px; /* Ajusta espacio superior */
     }
     section {
         padding: 20px;
@@ -230,13 +329,19 @@ footer {
     }
     /* FIX para el anclaje con cabecera fija en móvil */
     section::before {
-        height: 110px; /* <-- AJUSTE A 110px en móvil también */
-        margin-top: -110px; /* <-- AJUSTE A -110px en móvil también */
+        height: 100px; /* Ajusta altura según header móvil */
+        margin-top: -100px; /* Ajusta margen según header móvil */
     }
-    .sidebar {
+    h2 {
+        font-size: 2rem;
+    }
+    h3 {
+        font-size: 1.5rem;
+    }
+     .sidebar {
         padding-top: 60px;
         width: 0;
-    }
+     }
      .sidebar a {
         font-size: 18px;
      }
@@ -244,23 +349,14 @@ footer {
         width: 75%; /* Ancho del sidebar en móvil */
      }
      /* No necesitamos desplazar el contenido principal si el sidebar es overlay */
-     /* .content.shifted {
-         margin-right: 75%;
-     } */
-}
 
-/* Estilo básico para elementos de portafolio (si decides añadir imágenes) */
-/* .portfolio-item {
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.7);
+     /* Ajustes para iconos en móvil */
+     .contact-icons-main a {
+        font-size: 30px; /* Tamaño de icono un poco menor en móvil */
+        gap: 15px;
+     }
+      .sidebar-contact-icons a {
+        font-size: 24px; /* Tamaño de icono en sidebar móvil */
+        gap: 10px;
+      }
 }
-
-.portfolio-item img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 15px;
-    border-radius: 5px;
-} */

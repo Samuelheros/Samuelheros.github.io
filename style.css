@@ -308,6 +308,7 @@ footer {
     /* Asegura que los iconos de contacto en la sección principal no se centren en desktop si el contenido no lo está */
     .contact-icons-main {
          justify-content: flex-start;
+         gap: 40px; /* Doble espacio entre iconos en PC */
     }
 }
 

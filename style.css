@@ -1,0 +1,266 @@
+/* Definición de variables CSS para los colores */
+:root {
+    --primary-color: #004d40; /* Verde oscuro */
+    --secondary-color: #00796b; /* Verde teal */
+    --background-light: #e0f2f7; /* Azul claro muy suave */
+    --background-header: #b2ebf2; /* Azul claro */
+    --sidebar-background: #b2ebf2; /* Azul claro */
+    --hover-color: #80deea; /* Azul cian claro */
+    --text-color: #333; /* Gris oscuro para el texto */
+    --section-background: rgba(255, 255, 255, 0.95); /* Blanco con más opacidad */
+    --border-color: #b2ebf2; /* Borde sutil */
+    --link-color: var(--primary-color); /* Color de enlace */
+    --link-hover-color: var(--secondary-color); /* Color de enlace al pasar el ratón */
+    --footer-bg: #b2ebf2; /* Fondo del footer */
+    --footer-text: var(--primary-color); /* Color del texto del footer */
+}
+
+/* Desplazamiento suave para anclajes */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Lato', sans-serif; /* Fuente para el cuerpo */
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-light);
+    color: var(--text-color);
+    line-height: 1.6; /* Mejora la legibilidad */
+}
+
+header {
+    background-color: var(--background-header);
+    color: var(--primary-color);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2); /* Sombra mejorada */
+    box-sizing: border-box;
+    transition: background-color 0.3s ease; /* Transición para posible cambio de color al scroll */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    transition: color 0.3s ease; /* Transición de color */
+}
+
+.menu-toggle {
+    font-size: 30px;
+    cursor: pointer;
+    margin-left: 20px;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.menu-toggle:hover {
+    color: var(--secondary-color);
+}
+
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: var(--sidebar-background);
+    overflow-x: hidden;
+    transition: 0.5s ease-in-out; /* Transición más suave */
+    padding-top: 80px;
+    box-shadow: -4px 0 8px rgba(0,0,0,0.2); /* Sombra mejorada */
+    z-index: 1001;
+    opacity: 0.98;
+    display: flex; /* Usar flexbox para los enlaces */
+    flex-direction: column;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 20px;
+    color: var(--primary-color);
+    display: block;
+    transition: 0.3s background-color ease, 0.3s color ease;
+}
+
+.sidebar a:hover {
+    background-color: var(--hover-color);
+    color: var(--primary-color);
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 0;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.sidebar .closebtn:hover {
+    color: var(--secondary-color);
+}
+
+
+.content {
+    margin-top: 100px; /* Ajusta según la altura de tu header */
+    padding: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+section {
+    margin-bottom: 40px;
+    padding: 30px; /* Aumenta el padding de las secciones */
+    background-color: var(--section-background);
+    border-radius: 10px; /* Bordes más redondeados */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra mejorada */
+    transition: box-shadow 0.3s ease;
+}
+
+section:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* Efecto más notorio al pasar el ratón */
+}
+
+/* FIX para el anclaje con cabecera fija */
+/* AJUSTE FINO PARA EL DESPLAZAMIENTO */
+section::before {
+    content: "";
+    display: block;
+    height: 110px; /* <-- AJUSTE A 110px */
+    margin-top: -110px; /* <-- AJUSTE A -110px */
+    visibility: hidden;
+    pointer-events: none;
+}
+
+h2 {
+    color: var(--secondary-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px; /* Aumenta el padding inferior */
+    margin-bottom: 25px; /* Aumenta el margen inferior */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 2.2rem; /* Tamaño de fuente ligeramente mayor */
+}
+
+h3 {
+    color: var(--secondary-color);
+    margin-top: 35px; /* Más espacio superior */
+    margin-bottom: 15px; /* Más espacio inferior */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.7rem; /* Tamaño de fuente ligeramente mayor */
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 15px; /* Aumenta el espacio entre items */
+    line-height: 1.7; /* Mejora la legibilidad */
+    position: relative;
+    padding-left: 25px; /* Espacio para el bullet personalizado */
+}
+
+li::before {
+    content: "\2022"; /* Código Unicode para un punto */
+    color: var(--secondary-color);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* Estilos para los enlaces dentro de las secciones */
+section a {
+    color: var(--link-color);
+    text-decoration: none;
+    border-bottom: 1px solid var(--link-color);
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+section a:hover {
+    color: var(--link-hover-color);
+    border-bottom-color: var(--link-hover-color);
+}
+
+/* Estilos para iconos */
+.fas, .fab {
+    margin-right: 8px; /* Espacio a la derecha de los iconos */
+    color: var(--secondary-color); /* Color para los iconos */
+}
+
+
+footer {
+    text-align: center;
+    padding: 30px 20px; /* Aumenta el padding */
+    margin-top: 50px; /* Más espacio superior */
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+    font-size: 1rem; /* Tamaño de fuente ligeramente mayor */
+}
+
+/* Media query para hacerlo más responsive */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 22px;
+    }
+    .content {
+        padding: 15px;
+        margin-top: 100px; /* Asegura que haya espacio para el header */
+    }
+    section {
+        padding: 20px;
+        margin-bottom: 30px; /* Reduce el margen inferior en móvil */
+    }
+    /* FIX para el anclaje con cabecera fija en móvil */
+    section::before {
+        height: 110px; /* <-- AJUSTE A 110px en móvil también */
+        margin-top: -110px; /* <-- AJUSTE A -110px en móvil también */
+    }
+    .sidebar {
+        padding-top: 60px;
+        width: 0;
+    }
+     .sidebar a {
+        font-size: 18px;
+     }
+     .sidebar.open {
+        width: 75%; /* Ancho del sidebar en móvil */
+     }
+     /* No necesitamos desplazar el contenido principal si el sidebar es overlay */
+     /* .content.shifted {
+         margin-right: 75%;
+     } */
+}
+
+/* Estilo básico para elementos de portafolio (si decides añadir imágenes) */
+/* .portfolio-item {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.portfolio-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 5px;
+} */

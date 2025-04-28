@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Agregar listener para cerrar el sidebar al hacer clic en un enlace de sección
     sidebarLinks.forEach(link => {
-        if (link.href && link.href.includes('#') && !link.classList.contains('closebtn')) {
+        // Verificamos que el enlace tenga un href y no sea el botón de cerrar o un enlace de icono de contacto
+        if (link.href && link.href.includes('#') && !link.classList.contains('closebtn') && link.parentElement.className !== 'sidebar-contact-icons') {
              link.addEventListener('click', function(e) {
                 // No prevenimos el comportamiento por defecto para que el scroll suave de CSS funcione
                 // e.preventDefault(); // Comentar o eliminar si usas scroll-behavior: smooth en CSS
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         } else if (!link.href || link.href === '#') {
-            // Si es un enlace sin href o solo con #, como el de "cerrar menú"
+             // Si es un enlace sin href o solo con #, como el de "cerrar menú"
             link.addEventListener('click', function(e) {
                  // Prevenir el comportamiento por defecto solo para enlaces que no deben navegar
                  // Esto evita que la página se mueva al inicio si el href es solo '#'
@@ -84,24 +85,59 @@ document.addEventListener('DOMContentLoaded', function() {
                     e.preventDefault();
                 }
                 // No cerramos el menú aquí, ya que el botón cerrar ya tiene su propio listener
-                // O podrías llamar a closeNav() aquí si quisieras que cualquier '#' cerrara el menú.
             });
         }
+        // No añadimos listener de cerrar a los iconos de contacto en el sidebar,
+        // ya que deben abrir el enlace externo y el usuario puede querer mantener el menú abierto.
     });
 
 
-    // Opcional: Cerrar sidebar si se hace clic fuera de él (requiere un overlay)
-    // Para implementar esto, añadirías un div de overlay semitransparente
-    // entre el sidebar y el contenido principal cuando el sidebar se abre,
-    // y añadirías un event listener a ese overlay para llamar a closeNav()
+    // Implementación: Añadir/quitar clase 'scrolled' al header
+    window.addEventListener('scroll', function() {
+        // Define el umbral de scroll para añadir la clase
+        const scrollThreshold = 50;
+        if (window.scrollY > scrollThreshold) {
+            header.classList.add('scrolled'); // Añade una clase CSS
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
 
-    // Mejora opcional: Añadir/quitar sombra o cambiar estilo del header al hacer scroll
-    // window.addEventListener('scroll', function() {
-    //     if (window.scrollY > 50) { // Cambia 50 por el umbral que prefieras
-    //         header.classList.add('scrolled'); // Añade una clase CSS
-    //     } else {
-    //         header.classList.remove('scrolled');
-    //     }
-    // });
-     // Asegúrate de definir el estilo .header.scrolled en tu CSS si usas esto
+     // Mejora opcional: Resaltar enlace activo en el sidebar al hacer scroll
+     // Esto requiere Observadores de Intersección
+     const sections = document.querySelectorAll('section');
+     const observer = new IntersectionObserver(entries => {
+         entries.forEach(entry => {
+             const id = entry.target.getAttribute('id');
+             // Excluimos el enlace de contacto si es necesario, aunque con href="#contacto" debería funcionar
+             const sidebarLink = document.querySelector(`#mySidebar a[href="#${id}"]`);
+
+             if (entry.isIntersecting) {
+                 // Eliminar 'active' de todos los enlaces de sección primero
+                 sidebarLinks.forEach(link => {
+                      if (link.href && link.href.includes('#') && !link.parentElement.classList.contains('sidebar-contact-icons')) {
+                           link.classList.remove('active');
+                      }
+                 });
+                 // Añadir 'active' al enlace de sección visible actualmente
+                 if (sidebarLink) {
+                     sidebarLink.classList.add('active');
+                 }
+             }
+         });
+     }, {
+         // Ajusta este valor si tu header tiene una altura diferente
+         // rootMargin: '-50% 0px -50% 0px'
+         // Una alternativa puede ser calcular dinámicamente la altura del header
+         // Por ahora, mantenemos un valor fijo o puedes ajustarlo manualmente.
+         // Si tu header mide 100px, -100px 0px -100px 0px podría funcionar.
+         // Un valor más conservador como -20% 0px -20% 0px suele ser seguro.
+         rootMargin: '-20% 0px -20% 0px'
+     });
+
+     // Observar cada sección
+     sections.forEach(section => {
+         observer.observe(section);
+     });
+
 });

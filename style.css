@@ -74,7 +74,7 @@ header h1 {
     border-radius: 5px; /* Bordes redondeados */
     transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
     /* Animación de pulso */
-    animation: pulseAnimation 2.5s infinite ease-in-out 1s; /* Inicia después de 1s */
+    animation: pulseAnimation 1.2s infinite ease-in-out 1s; /* Inicia después de 1s */
 }
 
 .menu-toggle:hover {

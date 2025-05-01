@@ -1,4 +1,4 @@
-# ¡Hola! 👋 Soy [Tu Nombre]
+# ¡Hola! 👋 
 
 ¡Bienvenido/a a mi rincón en GitHub!
 

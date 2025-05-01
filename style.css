@@ -134,8 +134,8 @@ header h1 {
 
 .sidebar .closebtn {
     position: absolute;
-    top: 10px;
-    right: 25px;
+    top: 1px;
+    right: 5px;
     font-size: 36px;
     margin-left: 0;
     color: var(--primary-color);
@@ -275,17 +275,17 @@ li::before {
 }
 
 /* Estilos para los enlaces de texto genéricos dentro de las secciones (si existen) */
-section a {
-    color: var(--link-color);
-    text-decoration: none;
-    border-bottom: 1px solid var(--link-color);
-    transition: color 0.3s ease, border-bottom-color 0.3s ease;
-}
+/* section a {  <-- Comentado para evitar conflicto con .professional-title-link */
+/* color: var(--link-color); */
+/* text-decoration: none; */
+/* border-bottom: 1px solid var(--link-color); */
+/* transition: color 0.3s ease, border-bottom-color 0.3s ease; */
+/*} */
 
-section a:hover {
-    color: var(--link-hover-color);
-    border-bottom-color: var(--link-hover-color);
-}
+/* section a:hover { <-- Comentado para evitar conflicto con .professional-title-link */
+/* color: var(--link-hover-color); */
+/* border-bottom-color: var(--link-hover-color); */
+/*} */
 
 /* Estilos para la sección de Información Personal con foto */
 .personal-content {
@@ -338,6 +338,33 @@ footer {
     color: var(--footer-text);
     font-size: 1.1rem; /* Tamaño de fuente ligeramente mayor */
 }
+
+/* --- Estilos para enlaces de títulos profesionales --- */
+.professional-title-link {
+  color: inherit; /* Hereda el color del texto padre para ser sutil */
+  text-decoration: none; /* Quita el subrayado por defecto */
+  display: inline-block; /* Necesario para aplicar 'transform' correctamente */
+  position: relative; /* Base para pseudo-elementos si se quisieran usar después */
+  transition: transform 0.3s ease-out, color 0.3s ease-out, text-decoration-color 0.3s ease-out;
+  /* Transición suave para el movimiento, color y color del subrayado */
+  border-bottom: 1px solid transparent; /* Opcional: reserva espacio para el subrayado en hover */
+}
+
+.professional-title-link:hover {
+  color: var(--secondary-color); /* Cambia al color secundario al pasar el cursor (verde teal) */
+  transform: translateY(-3px); /* Mueve el texto 3px hacia arriba */
+  text-decoration: underline; /* Añade subrayado al pasar el cursor */
+  text-decoration-color: var(--secondary-color); /* Color del subrayado igual al texto */
+  cursor: pointer; /* Asegura que el cursor sea una mano */
+}
+
+/* Ajuste para asegurar que no interfiera con iconos si estuvieran dentro de un enlace similar */
+.professional-title-link i {
+    transform: none; /* Evita que los iconos dentro del enlace se muevan */
+    display: inline-block; /* Asegura que el icono no rompa el flujo */
+}
+/* --- Fin Estilos para enlaces --- */
+
 
 /* Media query para hacerlo más responsive */
 @media (min-width: 769px) {

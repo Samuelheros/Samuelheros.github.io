@@ -15,6 +15,8 @@
     --footer-text: var(--primary-color); /* Color del texto del footer */
     --accent-color: #004d40; /* Un color de acento, aquí usando el primario */
     --overlay-color: rgba(0, 0, 0, 0.5); /* Color para el overlay */
+    --light-text-color: var(--background-light); /* Color claro para texto sobre fondo oscuro */
+    --light-text-hover-color: #FFFFFF; /* Blanco para hover sobre fondo oscuro */
 }
 
 /* Desplazamiento suave para anclajes */
@@ -61,36 +63,42 @@ header h1 {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     transition: color 0.3s ease; /* Transición de color */
+    flex-shrink: 0; /* Evita que el título se reduzca si no hay espacio */
+    margin-right: 15px; /* Espacio entre título y selector de idioma */
 }
 
-/* --- MEJORAS BOTÓN MENÚ --- */
+/* --- MODIFICACIONES BOTÓN MENÚ --- */
 .menu-toggle {
     font-size: 36px; /* Tamaño aumentado */
     cursor: pointer;
-    margin-left: 20px;
-    color: var(--primary-color);
-    background-color: rgba(255, 255, 255, 0.3); /* Fondo sutil */
+    /* Colores Invertidos */
+    color: var(--light-text-color); /* Color claro para las líneas (hamburguesa) */
+    background-color: var(--primary-color); /* Fondo oscuro */
     padding: 5px 10px; /* Espaciado interno */
     border-radius: 5px; /* Bordes redondeados */
     transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
     /* Animación de pulso */
-    animation: pulseAnimation 1.2s infinite ease-in-out 1s; /* Inicia después de 1s */
+    animation: pulseAnimation 1.2s infinite ease-in-out 1s;
+    /* Asegurar que no se encoja */
+    flex-shrink: 0;
+    margin-left: 10px; /* Espacio después del selector de idioma */
 }
 
 .menu-toggle:hover {
-    color: var(--secondary-color);
-    background-color: rgba(255, 255, 255, 0.5); /* Fondo más visible al pasar el ratón */
+    /* Hover con colores invertidos */
+    color: var(--light-text-hover-color); /* Blanco para líneas en hover */
+    background-color: var(--secondary-color); /* Fondo verde teal en hover */
     transform: scale(1.05); /* Ligero aumento al pasar el ratón */
 }
 
-/* Keyframes para la animación de pulso */
+/* Keyframes para la animación de pulso (sin cambios) */
 @keyframes pulseAnimation {
     0% { transform: scale(1); }
     3% { transform: scale(1.08); } /* Pulso rápido */
     6% { transform: scale(1); }
     100% { transform: scale(1); } /* Resto del tiempo normal */
 }
-/* --- FIN MEJORAS BOTÓN MENÚ --- */
+/* --- FIN MODIFICACIONES BOTÓN MENÚ --- */
 
 .sidebar {
     height: 100%;
@@ -118,6 +126,7 @@ header h1 {
     color: var(--primary-color);
     display: block;
     transition: 0.3s background-color ease, 0.3s color ease;
+    white-space: nowrap; /* Evita que el texto del menú se divida en dos líneas */
 }
 
 .sidebar a:hover {
@@ -140,10 +149,12 @@ header h1 {
     margin-left: 0;
     color: var(--primary-color);
     transition: color 0.3s ease;
+    padding: 0 10px; /* Añadir padding para facilitar el click */
 }
 
 .sidebar .closebtn:hover {
     color: var(--secondary-color);
+    background-color: transparent !important; /* Asegurar que no cambie fondo */
 }
 
 /* Estilos para los iconos de contacto en el sidebar */
@@ -274,19 +285,6 @@ li::before {
     line-height: 1.6; /* Alinea con el texto */
 }
 
-/* Estilos para los enlaces de texto genéricos dentro de las secciones (si existen) */
-/* section a {  <-- Comentado para evitar conflicto con .professional-title-link */
-/* color: var(--link-color); */
-/* text-decoration: none; */
-/* border-bottom: 1px solid var(--link-color); */
-/* transition: color 0.3s ease, border-bottom-color 0.3s ease; */
-/*} */
-
-/* section a:hover { <-- Comentado para evitar conflicto con .professional-title-link */
-/* color: var(--link-hover-color); */
-/* border-bottom-color: var(--link-hover-color); */
-/*} */
-
 /* Estilos para la sección de Información Personal con foto */
 .personal-content {
     display: flex;
@@ -366,6 +364,54 @@ footer {
 /* --- Fin Estilos para enlaces --- */
 
 
+/* --- Estilos Selector de Idioma --- */
+.language-selector {
+    position: relative; /* Contenedor para el icono si se usa */
+    display: flex; /* Alinea icono y select */
+    align-items: center;
+    margin-left: auto; /* Empuja a la derecha, antes del menú hamburguesa */
+    /* No necesita margin-right aquí, el menu-toggle ya tiene margin-left */
+}
+
+.language-selector i.fa-globe {
+    color: var(--primary-color); /* Color del icono */
+    margin-right: 8px; /* Espacio entre icono y select */
+    font-size: 1.2em; /* Tamaño del icono */
+}
+
+#lang-select {
+    background-color: rgba(255, 255, 255, 0.5); /* Fondo semi-transparente */
+    color: var(--primary-color); /* Color del texto */
+    border: 1px solid var(--primary-color); /* Borde sutil */
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    appearance: none; /* Quita estilos por defecto del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23004d40%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha SVG personalizada */
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 10px auto;
+    padding-right: 30px; /* Espacio para la flecha */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#lang-select:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-color: var(--secondary-color);
+}
+
+#lang-select:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 1px;
+}
+
+/* --- Fin Estilos Selector de Idioma --- */
+
+
 /* Media query para hacerlo más responsive */
 @media (min-width: 769px) {
     /* En pantallas más grandes, ponemos la foto a un lado */
@@ -388,15 +434,19 @@ footer {
 
 
 @media (max-width: 768px) {
+    header {
+        padding: 10px 15px; /* Menos padding en móvil */
+    }
     header h1 {
-        font-size: 22px;
+        font-size: 18px; /* Título más pequeño */
+        margin-right: 10px; /* Menos espacio */
     }
      header.scrolled {
         background-color: rgba(178, 235, 242, 0.98); /* Un poco más opaco al hacer scroll en móvil */
      }
     .content {
         padding: 15px;
-        margin-top: 90px; /* Ajusta espacio superior */
+        margin-top: 80px; /* Ajusta espacio superior según nuevo header */
     }
     section {
         padding: 20px;
@@ -404,28 +454,32 @@ footer {
     }
     /* FIX para el anclaje con cabecera fija en móvil */
     section::before {
-        height: 100px; /* Ajusta altura según header móvil */
-        margin-top: -100px; /* Ajusta margen según header móvil */
+        height: 90px; /* Ajusta altura según header móvil */
+        margin-top: -90px; /* Ajusta margen según header móvil */
     }
     h2 {
-        font-size: 2rem;
+        font-size: 1.8rem; /* Reducir h2 */
     }
     h3 {
-        font-size: 1.5rem;
+        font-size: 1.4rem; /* Reducir h3 */
     }
      .sidebar {
         padding-top: 60px;
         width: 0;
      }
      .sidebar a {
-        font-size: 18px;
+        font-size: 16px; /* Menú lateral más pequeño */
+        padding: 12px 20px;
      }
-     /* No necesitamos la clase .open, ya que el ancho se controla directamente */
-     /* Si .sidebar tiene width > 0, está abierto */
+     .sidebar .closebtn {
+         font-size: 30px;
+         right: 0px;
+         top: 5px;
+     }
 
      /* Ajustes para iconos en móvil */
      .contact-icons-main a {
-        font-size: 30px; /* Tamaño de icono un poco menor en móvil */
+        font-size: 28px; /* Tamaño de icono un poco menor en móvil */
         gap: 15px;
      }
       .sidebar-contact-icons a {
@@ -435,8 +489,22 @@ footer {
 
     /* Ajustes botón menú en móvil */
     .menu-toggle {
-        font-size: 32px; /* Ligeramente más pequeño en móvil */
+        font-size: 30px; /* Ligeramente más pequeño en móvil */
         padding: 3px 8px;
+        margin-left: 5px; /* Menos espacio */
+    }
+
+    /* Ajustes selector idioma móvil */
+     .language-selector i.fa-globe {
+       font-size: 1.1em; /* Ajustar tamaño icono */
+       margin-right: 5px;
+    }
+    #lang-select {
+        padding: 4px 6px;
+        font-size: 0.8rem;
+        padding-right: 25px; /* Espacio flecha móvil */
+        background-size: 8px auto;
+        background-position: right 6px top 50%;
     }
 
     /* Asegurar que el overlay cubra toda la pantalla en móvil */

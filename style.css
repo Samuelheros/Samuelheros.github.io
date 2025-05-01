@@ -14,6 +14,7 @@
     --footer-bg: #b2ebf2; /* Fondo del footer */
     --footer-text: var(--primary-color); /* Color del texto del footer */
     --accent-color: #004d40; /* Un color de acento, aquí usando el primario */
+    --overlay-color: rgba(0, 0, 0, 0.5); /* Color para el overlay */
 }
 
 /* Desplazamiento suave para anclajes */
@@ -28,6 +29,7 @@ body {
     background-color: var(--background-light);
     color: var(--text-color);
     line-height: 1.7; /* Mejora la legibilidad */
+    position: relative; /* Necesario para el overlay */
 }
 
 header {
@@ -61,17 +63,34 @@ header h1 {
     transition: color 0.3s ease; /* Transición de color */
 }
 
+/* --- MEJORAS BOTÓN MENÚ --- */
 .menu-toggle {
-    font-size: 30px;
+    font-size: 36px; /* Tamaño aumentado */
     cursor: pointer;
     margin-left: 20px;
     color: var(--primary-color);
-    transition: color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.3); /* Fondo sutil */
+    padding: 5px 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+    /* Animación de pulso */
+    animation: pulseAnimation 2.5s infinite ease-in-out 1s; /* Inicia después de 1s */
 }
 
 .menu-toggle:hover {
     color: var(--secondary-color);
+    background-color: rgba(255, 255, 255, 0.5); /* Fondo más visible al pasar el ratón */
+    transform: scale(1.05); /* Ligero aumento al pasar el ratón */
 }
+
+/* Keyframes para la animación de pulso */
+@keyframes pulseAnimation {
+    0% { transform: scale(1); }
+    3% { transform: scale(1.08); } /* Pulso rápido */
+    6% { transform: scale(1); }
+    100% { transform: scale(1); } /* Resto del tiempo normal */
+}
+/* --- FIN MEJORAS BOTÓN MENÚ --- */
 
 .sidebar {
     height: 100%;
@@ -81,10 +100,10 @@ header h1 {
     right: 0;
     background-color: var(--sidebar-background);
     overflow-x: hidden;
-    transition: 0.5s ease-in-out; /* Transición más suave */
+    transition: width 0.5s ease-in-out; /* Transición más suave */
     padding-top: 80px;
     box-shadow: -4px 0 8px rgba(0,0,0,0.2); /* Sombra mejorada */
-    z-index: 1001;
+    z-index: 1001; /* Encima del header y contenido */
     opacity: 0.98;
     display: flex; /* Usar flexbox para los enlaces y los iconos de contacto */
     flex-direction: column;
@@ -105,6 +124,13 @@ header h1 {
     background-color: var(--hover-color);
     color: var(--primary-color);
 }
+
+/* Estilo para el enlace activo en el sidebar */
+.sidebar a.active {
+    background-color: var(--hover-color);
+    font-weight: bold;
+}
+
 
 .sidebar .closebtn {
     position: absolute;
@@ -151,7 +177,28 @@ header h1 {
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
+    position: relative; /* Necesario para el z-index del pseudo-elemento overlay */
+    z-index: 1; /* Asegura que esté por debajo del sidebar */
+    transition: filter 0.5s ease-in-out; /* Transición para el efecto overlay */
 }
+
+/* --- MEJORA OVERLAY --- */
+/* Aplicamos un pseudo-elemento para el overlay cuando el sidebar está abierto */
+.content.sidebar-open::before {
+    content: '';
+    position: fixed; /* O absolute si prefieres que cubra solo el .content */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay-color);
+    z-index: 999; /* Por debajo del sidebar (1001) pero encima del contenido */
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: auto; /* Permite cerrar el menú al hacer clic en el overlay (opcional, requiere JS) */
+}
+/* --- FIN MEJORA OVERLAY --- */
+
 
 section {
     margin-bottom: 40px;
@@ -346,10 +393,8 @@ footer {
      .sidebar a {
         font-size: 18px;
      }
-     .sidebar.open {
-        width: 75%; /* Ancho del sidebar en móvil */
-     }
-     /* No necesitamos desplazar el contenido principal si el sidebar es overlay */
+     /* No necesitamos la clase .open, ya que el ancho se controla directamente */
+     /* Si .sidebar tiene width > 0, está abierto */
 
      /* Ajustes para iconos en móvil */
      .contact-icons-main a {
@@ -360,4 +405,15 @@ footer {
         font-size: 24px; /* Tamaño de icono en sidebar móvil */
         gap: 10px;
       }
+
+    /* Ajustes botón menú en móvil */
+    .menu-toggle {
+        font-size: 32px; /* Ligeramente más pequeño en móvil */
+        padding: 3px 8px;
+    }
+
+    /* Asegurar que el overlay cubra toda la pantalla en móvil */
+    .content.sidebar-open::before {
+        position: fixed; /* Asegurar que cubra toda la vista */
+    }
 }

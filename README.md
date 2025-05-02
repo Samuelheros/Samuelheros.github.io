@@ -10,7 +10,7 @@
 * `CSS`
 * `JavaScript`
 
-🚀 Mi objetivo es fusionar mis conocimientos en Inteligencia Artificial con las habilidades que estoy adquiriendo en desarrollo web para construir aplicaciones y experiencias interesantes.
+🚀 Mi objetivo es fusionar mis conocimientos en Inteligencia Artificial con las habilidades que he adquirido en desarrollo web para construir aplicaciones y experiencias interesantes.
 
 ### ✨ ¿Qué encontrarás por aquí?
 

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const content = document.querySelector('.content');
     const sidebarLinks = document.querySelectorAll('#mySidebar a');
     const header = document.querySelector('header');
-    const sections = document.querySelectorAll('section'); // Necesario para el observer
+    const sections = document.querySelectorAll('section'); // Necessary for the observer
 
     function openNav() {
         if (window.innerWidth <= 768) {
@@ -49,11 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     sidebarLinks.forEach(link => {
+        // Se revierte el listener de clic a su lógica original para permitir el comportamiento de ancla por defecto
         if (link.href && link.href.includes('#') && !link.classList.contains('closebtn') && link.parentElement.className !== 'sidebar-contact-icons') {
              link.addEventListener('click', function(e) {
+                // Eliminado e.preventDefault() y la lógica de window.scrollTo. El desplazamiento lo maneja scroll-behavior y scroll-margin-top
                 const targetId = link.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
+                    // Cerrar el sidebar después del desplazamiento (con un pequeño retraso)
                     setTimeout(closeNav, 300);
                 } else {
                     closeNav();
@@ -78,7 +81,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Intersection Observer para resaltar enlace activo
      const observerOptions = {
          root: null,
-         rootMargin: '0px 0px -60% 0px',
+         // Ajustado el rootMargin superior para coincidir aproximadamente con el scroll-margin-top de CSS
+         // Usamos -110px para alinearlo con la compensación de escritorio.
+         rootMargin: '-110px 0px -60% 0px', /* Ajusta este valor negativo si el resaltado no es preciso */
          threshold: 0
      };
 
@@ -140,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (element.tagName === 'TITLE') {
                         element.textContent = translations[key];
                     } else {
-                        element.innerHTML = translations[key]; // Usar innerHTML para permitir etiquetas básicas si es necesario
+                        element.innerHTML = translations[key]; // Usar innerHTML para permitir etiquetas básicas if necessary
                     }
                 } else {
                     console.warn(`Translation key not found for [${key}] in ${lang}.json`);
@@ -220,4 +225,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- FIN CÓDIGO DE TRADUCCIÓN ---
 
-}); // Cierre del addEventListener 'DOMContentLoaded' principal
+}); // Cierre del addEventListener principal

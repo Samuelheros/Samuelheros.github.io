@@ -1,513 +1,601 @@
-/* --- Definición de variables CSS para el Nuevo Tema Oscuro --- */
+/* Base Styles & iOS-inspired Design System */
 :root {
-    --background-dark: #1a1a2e; /* Fondo principal oscuro (azul/púrpura muy oscuro) */
-    --text-light: #f0f0f0; /* Color principal del texto (blanco suave) */
-    --section-background-dark: #210a3c; /* Fondo de secciones ligeramente más claro que el body */
-    --header-background-dark: #16213e; /* Fondo del header (azul muy oscuro) */
-    --sidebar-background-dark: #16213e; /* Fondo del sidebar (igual que header) */
-
-    /* --- Acento Vibrante (Cyan Eléctrico) --- */
-    --vibrant-accent: #00ffff;
-    --vibrant-accent-darker: #00b3b3; /* Una versión un poco más oscura */
-
-    /* Colores para interacción/hover */
-    --interactive-color: var(--vibrant-accent);
-    --interactive-hover-color: var(--text-light); /* Texto claro al pasar el ratón sobre acentos */
-
-    /* Otros elementos */
-    --border-dark: rgba(255, 255, 255, 0.1); /* Borde muy sutil */
-    --overlay-color: rgba(0, 0, 0, 0.7); /* Overlay más oscuro */
-
-    /* Shadows - pueden no ser tan efectivas en fondos oscuros, usamos sutiles */
-    --shadow-dark: 0 5px 15px rgba(0,0,0,0.5);
-    --shadow-dark-hover: 0 8px 20px rgba(0,0,0,0.7);
-
-    /* Enlaces */
-    --link-color: var(--text-light); /* Color base del enlace */
-    --link-hover-color: var(--vibrant-accent); /* Color del enlace al pasar el ratón */
+    /* Light Theme Colors */
+    --background-primary: #f2f2f7;
+    --background-secondary: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #3a3a3c;
+    --text-tertiary: #6e6e73;
+    --border-color: #d1d1d6;
+    --accent-color: #007aff;
+    --accent-color-muted: #5ac8fa;
+    --success-color: #34c759;
+    --danger-color: #ff3b30;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    
+    /* iOS UI Properties */
+    --border-radius-small: 8px;
+    --border-radius-medium: 12px;
+    --border-radius-large: 16px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+    --transition-speed: 0.3s;
+    
+    /* Header Height */
+    --header-height: 60px;
 }
 
-/* Desplazamiento suave para anclajes */
+/* Dark Theme Colors */
+[data-theme="dark"] {
+    --background-primary: #1c1c1e;
+    --background-secondary: #2c2c2e;
+    --text-primary: #ffffff;
+    --text-secondary: #ebebf0;
+    --text-tertiary: #aeaeb2;
+    --border-color: #38383a;
+    --accent-color: #0a84ff;
+    --accent-color-muted: #64d2ff;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Lato', sans-serif; /* Fuente para el cuerpo */
-    margin: 0;
-    padding: 0;
-    /* Usando background shorthand con overlay rgba, imagen, no-repeat, centrado y fijo */
-    /* Cambiado a .WEBP */
-    background: rgba(0, 0, 0, 0.1) url(bgimagen.WEBP) no-repeat center center fixed;
-    background-size: cover; /* Asegura que la imagen cubra todo */
-
-    color: var(--text-light); /* Texto claro */
-    line-height: 1.7; /* Mejora la legibilidad */
-    position: relative; /* Necesario para el overlay */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
-header {
-    background-color: var(--header-background-dark); /* Fondo oscuro para el header */
-    color: var(--text-light); /* Texto claro */
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
+.container {
     width: 100%;
-    top: 0;
-    z-index: 1000;
-    /* --- Sombras oscuras --- */
-    box-shadow: var(--shadow-dark);
-    box-sizing: border-box;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
 }
 
-/* Estilo para el header cuando se hace scroll */
-header.scrolled {
-    background-color: rgba(22, 33, 62, 0.95); /* Un poco más opaco */
-    box-shadow: var(--shadow-dark-hover);
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: var(--spacing-md);
 }
 
-header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    color: var(--vibrant-accent); /* Título principal con acento */
-    transition: color 0.3s ease;
-    flex-shrink: 0;
-    margin-right: 20px; /* Ajuste para separar del selector de idioma */
+h1 {
+    font-size: 2rem;
 }
-
-/* --- MODIFICACIONES BOTÓN MENÚ (Tema Oscuro) --- */
-.menu-toggle {
-    font-size: 36px;
-    cursor: pointer;
-    color: var(--vibrant-accent); /* Color del icono con acento */
-    background-color: transparent; /* Fondo transparente */
-    padding: 5px 10px;
-    border: 2px solid var(--vibrant-accent); /* Borde con acento */
-    border-radius: 5px;
-    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
-    animation: pulseAnimation 1.2s infinite ease-in-out 1s; /* Mantenemos la animación del original */
-    flex-shrink: 0;
-    margin-left: 10px;
-}
-
-.menu-toggle:hover {
-    color: var(--header-background-dark); /* Color oscuro en hover */
-    background-color: var(--vibrant-accent); /* Fondo con acento en hover */
-    border-color: var(--vibrant-accent);
-    transform: scale(1.05);
-}
-
-/* Keyframes para la animación de pulso (sin cambios) */
-@keyframes pulseAnimation {
-    0% { transform: scale(1); }
-    3% { transform: scale(1.08); }
-    6% { transform: scale(1); }
-    100% { transform: scale(1); }
-}
-/* --- FIN MODIFICACIONES BOTÓN MENÚ --- */
-
-.sidebar {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    top: 0;
-    right: 0;
-    background-color: var(--sidebar-background-dark); /* Fondo oscuro sidebar */
-    overflow-x: hidden;
-    overflow-y: auto; /* Asegura que puedas hacer scroll verticalmente si el contenido es largo */
-    transition: width 0.5s ease-in-out;
-    padding-top: 80px;
-    box-shadow: -6px 0 10px rgba(0,0,0,0.5); /* Sombra para destacar del contenido */
-    z-index: 1001;
-    opacity: 0.98;
-    display: flex;
-    flex-direction: column;
-    /* Eliminada la línea justify-content: space-between; */
-    /* justify-content: space-between; */
-    padding-bottom: 20px; /* Asegura que haya un poco de espacio en la parte inferior */
-}
-
-.sidebar a {
-    padding: 15px 25px;
-    text-decoration: none;
-    font-size: 20px;
-    color: var(--text-light); /* Texto claro en el menú */
-    display: block;
-    transition: 0.3s background-color ease, 0.3s color ease;
-    white-space: nowrap;
-    border-left: 4px solid transparent; /* Borde para indicar activo */
-}
-
-.sidebar a:hover {
-    background-color: var(--section-background-dark); /* Fondo de sección oscuro en hover */
-    color: var(--vibrant-accent); /* Color acento en hover */
-}
-
-/* Estilo para el enlace activo en el sidebar */
-.sidebar a.active {
-    background-color: var(--section-background-dark);
-    color: var(--vibrant-accent); /* Color acento para activo */
-    font-weight: bold;
-    border-left-color: var(--vibrant-accent); /* Borde con acento para activo */
-}
-
-.sidebar .closebtn {
-    position: absolute;
-    top: 1px;
-    right: 5px;
-    font-size: 36px;
-    margin-left: 0;
-    color: var(--text-light); /* Color claro */
-    transition: color 0.3s ease;
-    padding: 0 10px;
-}
-
-.sidebar .closebtn:hover {
-    color: var(--vibrant-accent); /* Color acento en hover */
-    background-color: transparent !important;
-}
-
-/* Estilos para los iconos de contacto en el sidebar */
-.sidebar-contact-icons {
-    /* Eliminamos margin-top: auto; */
-    /* margin-top: auto; */
-
-    /* Añade un margen superior para separar de los enlaces de navegación */
-    margin-top: 30px; /* Puedes ajustar este valor (ej. 20px, 40px) */
-
-    padding: 20px 25px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    border-top: 1px solid var(--border-dark); /* Borde sutil */
-}
-
-.sidebar-contact-icons a {
-    padding: 0;
-    display: inline-block;
-    font-size: 28px;
-    color: var(--text-light); /* Iconos claros */
-    transition: color 0.3s ease;
-}
-
-.sidebar-contact-icons a:hover {
-    color: var(--vibrant-accent); /* Color acento en hover */
-    background-color: transparent;
-}
-
-.content {
-    /* Manteniendo el margin-top original para espacio inicial */
-    margin-top: 100px;
-    padding: 20px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    z-index: 1;
-}
-
-/* --- MEJORA OVERLAY (Tema Oscuro) --- */
-.content.sidebar-open::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--overlay-color); /* Overlay más oscuro */
-    z-index: 999;
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out;
-    pointer-events: auto;
-}
-/* --- FIN MEJORA OVERLAY --- */
-
-section {
-    margin-bottom: 40px;
-    padding: 30px;
-    background-color: var(--section-background-dark); /* Fondo oscuro para secciones */
-    border-radius: 10px;
-    border: 1px solid var(--border-dark); /* Borde sutil */
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.3); /* Sombra interna sutil */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
-    /* FIX para el anclaje con cabecera fija usando scroll-margin-top */
-    /* Ajusta este valor para que sea ligeramente mayor que la altura de tu header */
-    scroll-margin-top: 110px; /* Valor para escritorio, puede requerir ajuste fino */
-}
-
-section:hover {
-    border-color: var(--vibrant-accent); /* Borde con acento en hover */
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 10px rgba(0, 255, 255, 0.3); /* Sombra interna + leve brillo exterior */
-}
-
-/* Eliminado el pseudo-elemento ::before */
-/* section::before { ... } */
 
 h2 {
-    color: var(--vibrant-accent); /* H2 con color de acento */
-    border-bottom: 2px solid var(--vibrant-accent-darker); /* Borde con acento oscuro */
-    padding-bottom: 15px;
-    margin-bottom: 25px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700; /* Mayor peso */
-    font-size: 2.6rem; /* Tamaño un poco mayor */
+    font-size: 1.75rem;
+    color: var(--text-primary);
 }
 
 h3 {
-    color: var(--text-light); /* H3 color texto principal */
-    margin-top: 35px;
-    margin-bottom: 15px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 2rem; /* Tamaño un poco mayor */
+    font-size: 1.25rem;
+    color: var(--text-secondary);
 }
 
 p {
-    margin-bottom: 15px;
-    line-height: 1.7;
-    color: var(--text-light); /* Asegura que los párrafos usen el color claro */
-    font-weight: 300; /* Texto más ligero */
+    margin-bottom: var(--spacing-md);
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-speed);
 }
 
-li {
-    margin-bottom: 12px;
-    line-height: 1.6;
-    position: relative;
-    padding-left: 30px; /* Más espacio para el bullet */
-    color: var(--text-light); /* Asegura que los items de lista usen el color claro */
-    font-weight: 300; /* Texto más ligero */
+a:hover {
+    color: var(--accent-color-muted);
 }
 
-li::before {
-    content: "\2022"; /* Código Unicode para un punto */
-    color: var(--vibrant-accent); /* Bullet con acento */
-    font-weight: bold;
-    display: inline-block;
-    width: 1em;
-    margin-left: 0em; /* Ajusta la posición horizontal */
-    position: absolute;
-    transform: translateY(-6px); /* Ajusta la posición vertical */
-    left: 0;
+/* Header & Navigation */
+header {
+    position: sticky;
     top: 0;
-    font-size: 1.4em; /* Tamaño del bullet más grande */
-    line-height: 1.6;
+    background-color: var(--background-secondary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background-color var(--transition-speed);
 }
 
-/* Estilos para la sección de Información Personal con foto */
-.personal-content {
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-left .name {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+}
+
+.header-left .title {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* iOS-style Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 31px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e9e9eb;
+    transition: .4s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-xs);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    z-index: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Theme Toggle Icons */
+.theme-toggle .fa-moon,
+.theme-toggle .fa-sun {
+    color: var(--text-tertiary);
+    font-size: 14px;
+    position: relative;
+    z-index: 0;
+}
+
+.theme-toggle .fa-moon {
+    margin-right: 5px;
+}
+
+.theme-toggle .fa-sun {
+    margin-left: 5px;
+}
+
+/* Language Toggle */
+.language-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.language-label {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 20px;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: var(--text-primary);
+    transition: transform var(--transition-speed), opacity var(--transition-speed);
+}
+
+/* Main Navigation */
+.main-nav {
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border-color);
+    transition: background-color var(--transition-speed);
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+}
+
+.main-nav li {
+    margin: 0 var(--spacing-xs);
+}
+
+.main-nav a {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-small);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.main-nav a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--accent-color);
+}
+
+[data-theme="dark"] .main-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Main Content Sections */
+.section {
+    padding: var(--spacing-xl) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.section-content {
+    background-color: var(--background-secondary);
+    border-radius: var(--border-radius-medium);
+    padding: var(--spacing-lg);
+    box-shadow: var(--card-shadow);
+    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+/* About Section */
+.profile-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-details h3 {
+    margin-bottom: var(--spacing-xs);
+}
+
+.location {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/* Skills Section */
+.skills-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.skills-list {
+    list-style: none;
+    margin-top: var(--spacing-md);
+}
+
+.skills-list li {
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--background-primary);
+    border-radius: var(--border-radius-small);
+    transition: background-color var(--transition-speed);
+}
+
+/* Experience Section */
+.experience-item {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.experience-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.experience-header {
+    margin-bottom: var(--spacing-md);
+}
+
+.experience-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.experience-company {
+    color: var(--accent-color);
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+}
+
+.experience-period, .experience-location {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.responsibilities-list {
+    list-style: none;
+    margin-top: var(--spacing-md);
+}
+
+.responsibilities-list li {
+    margin-bottom: var(--spacing-sm);
+    padding-left: var(--spacing-lg);
+    position: relative;
+}
+
+.responsibilities-list li:before {
+    content: "•";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+}
+
+/* Education Section */
+.education-item {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--background-primary);
+    border-radius: var(--border-radius-small);
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.education-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+.education-item a {
+    display: block;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.education-item a:hover {
+    color: var(--accent-color);
+}
+
+.education-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.education-institution {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.education-type {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+/* Certifications Section */
+.certifications-list {
+    list-style: none;
+}
+
+.certifications-list li {
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--background-primary);
+    border-radius: var(--border-radius-small);
+    transition: background-color var(--transition-speed);
+}
+
+/* Contact Section */
+.contact-content {
+    text-align: center;
+}
+
+.contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.contact-link {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    color: var(--text-primary);
+    transition: transform var(--transition-speed), color var(--transition-speed);
 }
 
-.personal-text {
-    flex-grow: 1;
+.contact-link i {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
 }
 
-.personal-photo img {
-    max-width: 200px;
-    height: auto;
-    border-radius: 50%;
-    /* --- Borde y efecto en dark mode --- */
-    border: 5px solid var(--vibrant-accent-darker); /* Borde con acento oscuro */
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); /* Brillo sutil */
+.contact-link:hover {
+    transform: translateY(-3px);
+    color: var(--accent-color);
 }
 
-/* Estilos para los iconos de contacto en la sección principal */
-.contact-icons-main {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.contact-icons-main a {
-    text-decoration: none;
-    color: var(--text-light); /* Iconos claros */
-    font-size: 36px;
-    transition: color 0.3s ease, transform 0.3s ease;
-    border-bottom: none;
-}
-
-.contact-icons-main a:hover {
-    color: var(--vibrant-accent); /* Color acento en hover */
-    transform: scale(1.1);
-    border-bottom: none;
-}
-
+/* Footer */
 footer {
+    background-color: var(--background-secondary);
+    padding: var(--spacing-lg) 0;
     text-align: center;
-    padding: 30px 20px;
-    margin-top: 50px;
-    background-color: var(--header-background-dark); /* Fondo oscuro similar al header */
-    color: var(--text-light); /* Texto claro */
-    font-size: 1.1rem;
-}
-
-/* --- Keyframes para la animación de parpadeo en amarillo --- */
-@keyframes yellow-blink {
-    0%, 100% {
-        color: var(--text-light); /* Color normal del texto (claro) */
-    }
-    50% {
-        color: #ffff00; /* Color amarillo brillante para el parpadeo */
-    }
-}
-
-/* --- Estilos base para la clase professional-title-link (sin animación ni comportamiento de link por defecto FUERA de Educación) --- */
-.professional-title-link {
-  color: var(--text-light); /* Usa el color de texto normal */
-  text-decoration: none; /* Asegura que no tenga subrayado */
-  cursor: default; /* Cambia el cursor a la flecha normal */
-  /* Eliminamos cualquier otra propiedad de link o animación por defecto */
-  transition: none;
-  transform: none;
-  animation: none; /* Eliminamos !important aquí */
-}
-
-/* --- Estilos para professional-title-link DENTRO de la sección de Educación (con animación y comportamiento de link) --- */
-#educacion .professional-title-link {
-  /* Aplica las propiedades de link y animación solo en la sección de educación */
-  text-decoration: none !important; /* Asegura que no haya subrayado por defecto ni en hover */
-  display: inline-block; /* Necesario para aplicar 'transform' correctamente */
-  position: relative; /* Base para pseudo-elementos si se quisieran usar después */
-  transition: transform 0.3s ease-out, color 0.3s ease-out; /* Transición suave para el movimiento y color en hover */
-  border-bottom: none !important; /* Asegura que no haya borde inferior */
-  cursor: pointer; /* Cambia el cursor a mano para indicar que es cliqueable */
-
-  /* Aplicamos la animación solo en la sección de educación */
-  animation: yellow-blink 1s infinite ease-in-out; /* Aplica la animación */
-}
-
-/* Estilos para el estado hover DENTRO de la sección de Educación */
-#educacion .professional-title-link:hover {
-  color: var(--vibrant-accent); /* Cambia al color de acento al pasar el cursor */
-  transform: translateY(-3px); /* Mueve el texto 3px hacia arriba (efecto moderno mantenido) */
-  text-decoration: none !important;
-    /* Quitamos la animación en hover para no interferir con el efecto hover */
-  animation-play-state: paused;
-}
-
-/* Ajuste para asegurar que los iconos dentro de .professional-title-link no tengan transformaciones ni animaciones */
-.professional-title-link i {
-    transform: none;
-    display: inline-block;
-    animation: none !important;
-}
-/* --- Fin Estilos para enlaces --- */
-
-/* --- Estilos Selector de Idioma (Dark Mode) --- */
-.language-selector {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-}
-
-.language-selector i.fa-globe {
-    color: var(--vibrant-accent); /* Icono con acento */
-    margin-right: 8px;
-    font-size: 1.2em;
-}
-
-#lang-select {
-    background-color: var(--section-background-dark); /* Fondo oscuro */
-    color: var(--text-light); /* Texto claro */
-    border: 1px solid var(--border-dark); /* Borde sutil */
-    padding: 5px 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Lato', sans-serif;
+    color: var(--text-tertiary);
     font-size: 0.9rem;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-     /* --- Flecha SVG (Asegúrate de que el color contraste con el fondo) --- */
-     /* SVG modificado para un color claro */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23f0f0f0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-    background-repeat: no-repeat;
-    background-position: right 8px top 50%;
-    background-size: 10px auto;
-    padding-right: 30px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color var(--transition-speed);
 }
 
-#lang-select:hover {
-    background-color: var(--sidebar-background-dark); /* Fondo más oscuro en hover */
-    border-color: var(--vibrant-accent); /* Borde con acento en hover */
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-left .title {
+        display: none;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-nav.active {
+        display: block;
+    }
+    
+    .main-nav ul {
+        flex-direction: column;
+        padding: 0;
+    }
+    
+    .main-nav li {
+        margin: 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .main-nav li:last-child {
+        border-bottom: none;
+    }
+    
+    .main-nav a {
+        display: block;
+        padding: var(--spacing-md);
+    }
+    
+    .skills-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-links {
+        gap: var(--spacing-md);
+    }
 }
 
-#lang-select:focus {
-    outline: 2px solid var(--vibrant-accent); /* Outline con acento */
-    outline-offset: 1px;
-}
-
-/* --- Fin Estilos Selector de Idioma --- */
-
-/* Media query para hacerlo más responsive */
-@media (min-width: 769px) {
-    .personal-content {
-        flex-direction: row;
+@media (max-width: 480px) {
+    .header-container {
+        height: auto;
+        padding: var(--spacing-sm) var(--spacing-md);
+        flex-direction: column;
         align-items: flex-start;
     }
-    .personal-photo {
-        flex-shrink: 0;
-        margin-left: 30px;
+    
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: var(--spacing-sm);
     }
-    .contact-icons-main {
-         justify-content: flex-start;
-         gap: 40px;
+    
+    .section-content {
+        padding: var(--spacing-md);
     }
-    /* Asegura que el margin-top para escritorio sea consistente */
-    .content {
-        margin-top: 100px; /* Puedes ajustar esto si 100px no es suficiente para que el contenido empiece debajo del header */
+    
+    .contact-link {
+        width: 45%;
+        margin-bottom: var(--spacing-md);
     }
-     /* Ajusta scroll-margin-top para móvil si es necesario */
-     section {
-        scroll-margin-top: 80px; /* Valor para móvil, puede requerir ajuste fino */
-     }
 }
 
-@media (max-width: 768px) {
-    header { padding: 10px 15px; }
-    header h1 { font-size: 18px; margin-right: 10px; }
-    header.scrolled { background-color: rgba(22, 33, 62, 0.98); }
-    /* Asegura que el margin-top para móvil sea consistente */
-    .content { padding: 15px; margin-top: 80px; } /* Puedes ajustar esto si 80px no es suficiente */
-    section {
-        padding: 20px;
-        margin-bottom: 30px;
-        /* Ajusta scroll-margin-top para móvil */
-        scroll-margin-top: 90px; /* Valor para móvil, puede requerir ajuste fino */
-    }
-    h2 { font-size: 2rem; } /* Ajustado para móvil */
-    h3 { font-size: 1.6rem; } /* Ajustado para móvil */
-    .sidebar { padding-top: 60px; width: 0; }
-    .sidebar a { font-size: 16px; padding: 12px 20px; }
-    .sidebar .closebtn { font-size: 30px; right: 0px; top: 5px; }
-    .contact-icons-main a { font-size: 28px; gap: 15px; }
-    .sidebar-contact-icons a { font-size: 24px; gap: 10px; }
-    .menu-toggle { font-size: 30px; padding: 3px 8px; margin-left: 5px; }
-    .language-selector i.fa-globe { font-size: 1.1em; margin-right: 5px;}
-    #lang-select {
-        padding: 4px 6px;
-        font-size: 0.8rem;
-        padding-right: 25px;
-        background-size: 8px auto;
-        background-position: right 6px top 50%;
-    }
-    .content.sidebar-open::before { position: fixed; }
+/* Animation for menu toggle */
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Transition effects */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* iOS-style focus states */
+button:focus, a:focus, input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
 }

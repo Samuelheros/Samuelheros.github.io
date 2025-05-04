@@ -1,228 +1,231 @@
+// Initialize the application when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Código Original del Sidebar, Scroll, etc. ---
-    const sidebar = document.getElementById("mySidebar");
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    // Initialize language
+    let currentLanguage = 'es';
+    loadLanguage(currentLanguage);
+    
+    // Initialize theme
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDarkScheme.matches) {
+        document.body.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-toggle').checked = true;
+    }
+    
+    // Event Listeners
+    setupEventListeners();
+});
+
+// Setup all event listeners
+function setupEventListeners() {
+    // Language toggle
+    const languageToggle = document.getElementById('language-toggle');
+    languageToggle.addEventListener('change', function() {
+        const newLanguage = this.checked ? 'en' : 'es';
+        loadLanguage(newLanguage);
+    });
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('change', function() {
+        document.body.setAttribute('data-theme', this.checked ? 'dark' : 'light');
+    });
+    
+    // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
-    const closeBtn = document.querySelector('.closebtn');
-    const content = document.querySelector('.content');
-    const sidebarLinks = document.querySelectorAll('#mySidebar a');
-    const header = document.querySelector('header');
-    const sections = document.querySelectorAll('section'); // Necessary for the observer
-
-    function openNav() {
-        if (window.innerWidth <= 768) {
-            sidebar.style.width = "75%";
-        } else {
-            sidebar.style.width = "250px";
-        }
-        if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
-        if (content) content.classList.add('sidebar-open');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeNav() {
-        sidebar.style.width = "0";
-        if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
-        if (content) content.classList.remove('sidebar-open');
-        document.body.style.overflow = '';
-    }
-
-    if (menuToggle) {
-        menuToggle.addEventListener('click', openNav);
-        menuToggle.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openNav(); }
+    const mainNav = document.querySelector('.main-nav');
+    
+    menuToggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+        mainNav.classList.toggle('active');
+    });
+    
+    // Close mobile menu when clicking on a nav link
+    const navLinks = document.querySelectorAll('.main-nav a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            menuToggle.classList.remove('active');
+            mainNav.classList.remove('active');
         });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeNav);
-        closeBtn.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeNav(); }
-        });
-    }
-
-    if (content) {
-        content.addEventListener('click', function(e) {
-            if (content.classList.contains('sidebar-open') && e.target === content) {
-                closeNav();
+    });
+    
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                const headerOffset = 80; // Adjust based on your header height
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
             }
         });
-    }
+    });
+}
 
-    sidebarLinks.forEach(link => {
-        // Se revierte el listener de clic a su lógica original para permitir el comportamiento de ancla por defecto
-        if (link.href && link.href.includes('#') && !link.classList.contains('closebtn') && link.parentElement.className !== 'sidebar-contact-icons') {
-             link.addEventListener('click', function(e) {
-                // Eliminado e.preventDefault() y la lógica de window.scrollTo. El desplazamiento lo maneja scroll-behavior y scroll-margin-top
-                const targetId = link.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    // Cerrar el sidebar después del desplazamiento (con un pequeño retraso)
-                    setTimeout(closeNav, 300);
-                } else {
-                    closeNav();
-                }
-            });
-        } else if (!link.href || link.href === '#') {
-             link.addEventListener('click', function(e) {
-                if (link.getAttribute('href') === '#') { e.preventDefault(); }
-             });
+// Load language data and update UI
+async function loadLanguage(lang) {
+    try {
+        const response = await fetch(`${lang}.json`);
+        if (!response.ok) {
+            throw new Error(`Failed to load language file: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        updateContent(data);
+        currentLanguage = lang;
+    } catch (error) {
+        console.error('Error loading language file:', error);
+    }
+}
+
+// Update all content with the selected language
+function updateContent(data) {
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const value = getNestedProperty(data, key);
+        
+        if (value !== undefined) {
+            element.textContent = value;
         }
     });
+    
+    // Update skills lists
+    updateSkillsList(data.skills.technical.items, 'technical-skills');
+    updateSkillsList(data.skills.soft.items, 'soft-skills');
+    
+    // Update experience items
+    updateExperienceItems(data.experience.items);
+    
+    // Update education items
+    updateEducationItems(data.education.items);
+    
+    // Update certifications
+    updateCertificationsList(data.certifications.items);
+}
 
-    window.addEventListener('scroll', function() {
-        const scrollThreshold = 50;
-        if (window.scrollY > scrollThreshold) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
+// Helper function to get nested properties from an object using dot notation
+function getNestedProperty(obj, path) {
+    return path.split('.').reduce((prev, curr) => {
+        return prev ? prev[curr] : undefined;
+    }, obj);
+}
+
+// Update skills list
+function updateSkillsList(skills, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    
+    skills.forEach(skill => {
+        const li = document.createElement('li');
+        li.textContent = skill;
+        container.appendChild(li);
     });
+}
 
-    // Intersection Observer para resaltar enlace activo
-     const observerOptions = {
-         root: null,
-         // Ajustado el rootMargin superior para coincidir aproximadamente con el scroll-margin-top de CSS
-         // Usamos -110px para alinearlo con la compensación de escritorio.
-         rootMargin: '-110px 0px -60% 0px', /* Ajusta este valor negativo si el resaltado no es preciso */
-         threshold: 0
-     };
-
-     const observer = new IntersectionObserver(entries => {
-         let lastActiveLink = null; // Para evitar quitar active si no hay nueva sección intersectando claramente
-
-         entries.forEach(entry => {
-             const id = entry.target.getAttribute('id');
-             const sidebarLink = document.querySelector(`#mySidebar a[href="#${id}"]`);
-
-             if (entry.isIntersecting && entry.intersectionRatio > 0) {
-                 // Marcar el enlace actual como potencialmente activo
-                if(sidebarLink) lastActiveLink = sidebarLink;
-             }
-         });
-
-        // Después de revisar todas las entries, actualizamos la clase active
-         sidebarLinks.forEach(link => {
-            if (link.href && link.href.includes('#') && !link.parentElement.classList.contains('sidebar-contact-icons')) {
-                link.classList.remove('active');
-            }
-         });
-         if(lastActiveLink){
-            lastActiveLink.classList.add('active');
-         }
-
-
-     }, observerOptions);
-
-     sections.forEach(section => {
-         observer.observe(section);
-     });
-
-    // --- FIN CÓDIGO ORIGINAL ---
-
-
-    // --- INICIO CÓDIGO DE TRADUCCIÓN ---
-
-    const langSelect = document.getElementById('lang-select');
-    // Seleccionar todos los elementos que puedan necesitar traducción
-    const elementsToTranslate = document.querySelectorAll('[data-translate]');
-    const elementsToTranslateAria = document.querySelectorAll('[data-translate-aria]');
-    const elementsToTranslateTitle = document.querySelectorAll('[data-translate-title]');
-    const elementsToTranslateAlt = document.querySelectorAll('[data-translate-alt]');
-
-    // Función para cargar y aplicar las traducciones
-    async function loadTranslations(lang) {
-        try {
-            const response = await fetch(`${lang}.json?v=${Date.now()}`); // Añadir caché busting
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const translations = await response.json();
-
-            // Aplicar traducciones al contenido principal (innerText/innerHTML)
-            elementsToTranslate.forEach(element => {
-                const key = element.getAttribute('data-translate');
-                if (translations[key] !== undefined) { // Comprobar si la clave existe
-                    if (element.tagName === 'TITLE') {
-                        element.textContent = translations[key];
-                    } else {
-                        element.innerHTML = translations[key]; // Usar innerHTML para permitir etiquetas básicas if necessary
-                    }
-                } else {
-                    console.warn(`Translation key not found for [${key}] in ${lang}.json`);
-                }
-            });
-
-            // Aplicar traducciones a atributos aria-label
-            elementsToTranslateAria.forEach(element => {
-                const key = element.getAttribute('data-translate-aria');
-                if (translations[key] !== undefined) {
-                    element.setAttribute('aria-label', translations[key]);
-                } else {
-                    console.warn(`Translation key not found for ARIA [${key}] in ${lang}.json`);
-                }
-            });
-
-            // Aplicar traducciones a atributos title
-            elementsToTranslateTitle.forEach(element => {
-                const key = element.getAttribute('data-translate-title');
-                 if (translations[key] !== undefined) {
-                     element.setAttribute('title', translations[key]);
-                } else {
-                    console.warn(`Translation key not found for TITLE [${key}] in ${lang}.json`);
-                }
-            });
-
-             // Aplicar traducciones a atributos alt
-             elementsToTranslateAlt.forEach(element => {
-                const key = element.getAttribute('data-translate-alt');
-                 if (translations[key] !== undefined) {
-                     element.setAttribute('alt', translations[key]);
-                } else {
-                    console.warn(`Translation key not found for ALT [${key}] in ${lang}.json`);
-                }
-            });
-
-
-            // Actualizar el atributo lang del HTML
-            document.documentElement.lang = lang;
-
-            // Guardar preferencia en localStorage
-            localStorage.setItem('preferredLanguage', lang);
-
-            // Asegurar que el select muestre el idioma actual
-            if (langSelect) {
-                langSelect.value = lang;
-            }
-
-        } catch (error) {
-            console.error("Could not load translations:", error);
-            // Opcional: Mostrar un mensaje al usuario o cargar un idioma por defecto
-        }
-    }
-
-    // Event listener para el cambio de idioma en el select
-    if (langSelect) {
-        langSelect.addEventListener('change', (event) => {
-            loadTranslations(event.target.value);
+// Update experience items
+function updateExperienceItems(experiences) {
+    const container = document.getElementById('experience-content');
+    container.innerHTML = '';
+    
+    experiences.forEach(exp => {
+        const item = document.createElement('div');
+        item.className = 'experience-item';
+        
+        const header = document.createElement('div');
+        header.className = 'experience-header';
+        
+        const title = document.createElement('h3');
+        title.className = 'experience-title';
+        title.textContent = exp.title;
+        
+        const company = document.createElement('div');
+        company.className = 'experience-company';
+        company.textContent = exp.company;
+        
+        const period = document.createElement('div');
+        period.className = 'experience-period';
+        period.textContent = exp.period;
+        
+        const location = document.createElement('div');
+        location.className = 'experience-location';
+        location.textContent = exp.location;
+        
+        header.appendChild(title);
+        header.appendChild(company);
+        header.appendChild(period);
+        header.appendChild(location);
+        
+        const responsibilities = document.createElement('ul');
+        responsibilities.className = 'responsibilities-list';
+        
+        exp.responsibilities.forEach(resp => {
+            const li = document.createElement('li');
+            li.textContent = resp;
+            responsibilities.appendChild(li);
         });
-    }
+        
+        item.appendChild(header);
+        item.appendChild(responsibilities);
+        container.appendChild(item);
+    });
+}
 
-    // Cargar idioma al iniciar la página (ya estamos dentro de DOMContentLoaded)
-    const preferredLanguage = localStorage.getItem('preferredLanguage');
-    const browserLanguage = navigator.language.split('-')[0];
-    let initialLang = 'es'; // Default a español
+// Update education items
+function updateEducationItems(educationItems) {
+    const container = document.getElementById('education-content');
+    container.innerHTML = '';
+    
+    educationItems.forEach(edu => {
+        const item = document.createElement('div');
+        item.className = 'education-item';
+        
+        const link = document.createElement('a');
+        link.href = edu.url || '#';
+        if (edu.url) {
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+        }
+        
+        const title = document.createElement('div');
+        title.className = 'education-title';
+        title.textContent = edu.title;
+        
+        const institution = document.createElement('div');
+        institution.className = 'education-institution';
+        institution.textContent = edu.institution;
+        
+        const type = document.createElement('div');
+        type.className = 'education-type';
+        type.textContent = edu.type;
+        
+        link.appendChild(title);
+        link.appendChild(institution);
+        link.appendChild(type);
+        
+        item.appendChild(link);
+        container.appendChild(item);
+    });
+}
 
-    const supportedLangs = ['es', 'en']; // Lista de idiomas soportados
-
-    if (preferredLanguage && supportedLangs.includes(preferredLanguage)) {
-        initialLang = preferredLanguage;
-    } else if (supportedLangs.includes(browserLanguage)) {
-        // initialLang = browserLanguage; // Descomentar si quieres priorizar el idioma del navegador si no hay preferencia guardada
-    }
-
-    // Carga las traducciones iniciales
-    loadTranslations(initialLang);
-
-    // --- FIN CÓDIGO DE TRADUCCIÓN ---
-
-}); // Cierre del addEventListener principal
+// Update certifications list
+function updateCertificationsList(certifications) {
+    const container = document.getElementById('certifications-list');
+    container.innerHTML = '';
+    
+    certifications.forEach(cert => {
+        const li = document.createElement('li');
+        li.textContent = cert;
+        container.appendChild(li);
+    });
+}

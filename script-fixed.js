@@ -21,7 +21,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Setup scroll reveal observer (create the observer instance)
   setupScrollReveal()
+
+  // Create backdrop for mobile menu
+  createMenuBackdrop()
 })
+
+// Create backdrop element for mobile menu
+function createMenuBackdrop() {
+  const backdrop = document.createElement("div")
+  backdrop.className = "menu-backdrop"
+  document.body.appendChild(backdrop)
+
+  // Add click event to close menu when backdrop is clicked
+  backdrop.addEventListener("click", () => {
+    const menuToggle = document.querySelector(".menu-toggle")
+    const mainNav = document.querySelector(".main-nav")
+
+    if (menuToggle && mainNav) {
+      menuToggle.classList.remove("active")
+      mainNav.classList.remove("active")
+      backdrop.classList.remove("active")
+      document.body.classList.remove("menu-open")
+    }
+  })
+}
 
 // Setup all event listeners
 function setupEventListeners() {
@@ -41,10 +64,12 @@ function setupEventListeners() {
   // Mobile menu toggle
   const menuToggle = document.querySelector(".menu-toggle")
   const mainNav = document.querySelector(".main-nav")
+  const backdrop = document.querySelector(".menu-backdrop")
 
   menuToggle.addEventListener("click", function () {
     this.classList.toggle("active")
     mainNav.classList.toggle("active")
+    backdrop.classList.toggle("active")
 
     // Toggle body class for overflow control
     document.body.classList.toggle("menu-open", mainNav.classList.contains("active"))
@@ -56,6 +81,7 @@ function setupEventListeners() {
     link.addEventListener("click", () => {
       menuToggle.classList.remove("active")
       mainNav.classList.remove("active")
+      backdrop.classList.remove("active")
       document.body.classList.remove("menu-open") // Restore scrolling
     })
   })
@@ -69,6 +95,7 @@ function setupEventListeners() {
     ) {
       menuToggle.classList.remove("active")
       mainNav.classList.remove("active")
+      backdrop.classList.remove("active")
       document.body.classList.remove("menu-open") // Restore scrolling
     }
   })
@@ -91,6 +118,37 @@ function setupEventListeners() {
         })
       }
     })
+  })
+
+  // Add iOS-style touch feedback to education items
+  const educationItems = document.querySelectorAll(".education-item")
+  educationItems.forEach((item) => {
+    // Add touch start event for mobile devices
+    item.addEventListener(
+      "touchstart",
+      function () {
+        this.style.transform = "scale(0.98)"
+      },
+      { passive: true },
+    )
+
+    // Add touch end event for mobile devices
+    item.addEventListener(
+      "touchend",
+      function () {
+        this.style.transform = ""
+      },
+      { passive: true },
+    )
+
+    // Reset transform on touch cancel
+    item.addEventListener(
+      "touchcancel",
+      function () {
+        this.style.transform = ""
+      },
+      { passive: true },
+    )
   })
 }
 
@@ -250,6 +308,34 @@ function updateEducationItems(educationItems) {
 
     item.appendChild(link)
     container.appendChild(item)
+  })
+
+  // Add iOS-style animations to education items
+  setupEducationAnimations()
+}
+
+// Setup iOS-style animations for education items
+function setupEducationAnimations() {
+  const educationItems = document.querySelectorAll(".education-item")
+
+  educationItems.forEach((item) => {
+    // Add hover effect with spring animation
+    item.addEventListener("mouseenter", function () {
+      this.style.transform = "scale(1.02) translateY(-2px)"
+    })
+
+    item.addEventListener("mouseleave", function () {
+      this.style.transform = ""
+    })
+
+    // Add click/tap effect
+    item.addEventListener("mousedown", function () {
+      this.style.transform = "scale(0.98)"
+    })
+
+    item.addEventListener("mouseup", function () {
+      this.style.transform = "scale(1.02) translateY(-2px)"
+    })
   })
 }
 

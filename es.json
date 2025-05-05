@@ -6,6 +6,7 @@
     "experience": "Experiencia",
     "education": "Educación",
     "certifications": "Certificaciones",
+    "projects": "Proyectos",
     "contact": "Contacto"
   },
   "about": {
@@ -123,6 +124,18 @@
       "Marketing online: Creación de un plan integral - LinkedIn Learning",
       "Google AI Essentials - Google Career Certificate",
       "Marketing B2B - Project Management institute (PMI)"
+    ]
+  },
+  "projects": {
+    "title": "Proyectos",
+    "items": [
+      {
+        "title": "AllPay",
+        "description": "AllPay es una plataforma de pago integral que centraliza transacciones para servicios móviles, hogar, deudas y más en un solo lugar. Con una interfaz intuitiva y segura, permite gestionar pagos de forma rápida y eficiente, optimizando la experiencia del usuario y garantizando transparencia en cada transacción.",
+        "url": "https://all-pay.netlify.app/",
+        "linkText": "Visitar Proyecto",
+        "image": "/images/allpay.png"
+      }
     ]
   },
   "contact": {

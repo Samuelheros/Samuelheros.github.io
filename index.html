@@ -197,6 +197,42 @@
     if (projectsLink) {
       projectsLink.style.display = 'block';
     }
+    
+    // Fix for iOS Safari - ensure menu works properly
+    const mainNav = document.querySelector('.main-nav');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const backdrop = document.querySelector('.menu-backdrop');
+    
+    if (mainNav && menuToggle && backdrop) {
+      // Force browser reflow to ensure animations work properly
+      window.getComputedStyle(mainNav).transform;
+      
+      // Test if backdrop works properly
+      menuToggle.addEventListener('click', function() {
+        // Force browser reflow for backdrop
+        if (backdrop) {
+          window.getComputedStyle(backdrop).opacity;
+        }
+      });
+    }
+    
+    // Fix for Chrome - ensure menu transitions properly
+    if (/Chrome/.test(navigator.userAgent)) {
+      const style = document.createElement('style');
+      style.textContent = `
+        @media (max-width: 768px) {
+          .main-nav {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+          }
+          .main-nav.active {
+            -webkit-transform: translateX(calc(-1 * var(--mobile-menu-width)));
+            transform: translateX(calc(-1 * var(--mobile-menu-width)));
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
   });
 </script>
 </body>

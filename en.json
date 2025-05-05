@@ -134,7 +134,16 @@
         "description": "AllPay is a comprehensive payment platform that centralizes transactions for mobile services, home, debt, and more in one place. With an intuitive and secure interface, it allows you to manage payments quickly and efficiently, optimizing the user experience and ensuring transparency in every transaction.",
         "url": "https://all-pay.netlify.app/",
         "linkText": "Visit Project",
-        "image": "/images/allpay.png"
+        "image": "/images/allpay.png",
+        "githubUrl": "https://github.com/Samuelheros"
+      },
+      {
+        "title": "Retro Racer",
+        "description": "Immerse yourself in a 3D obstacle racing experience with an endless track that will constantly challenge you with Retro Racer. Your skill in dodging each obstacle is key: the further you go, the greater the speed and intensity of the challenge. Retro Racer is in development and promises endless excitement for lovers of speed and challenges; the beta version is available now!",
+        "url": "https://retro-racer-game.vercel.app/",
+        "linkText": "Visit Project",
+        "image": "/images/retroracerimagen.webp",
+        "githubUrl": "https://github.com/Samuelheros"
       }
     ]
   },

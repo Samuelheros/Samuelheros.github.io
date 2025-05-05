@@ -415,17 +415,38 @@ function updateProjectsCarousel(projects) {
     description.className = "project-description"
     description.textContent = project.description
 
-    const link = document.createElement("a")
-    link.className = "project-link"
-    link.href = project.url
-    link.target = "_blank"
-    link.rel = "noopener noreferrer"
-    link.textContent = project.linkText
+    // Create buttons container
+    const buttonsContainer = document.createElement("div")
+    buttonsContainer.className = "project-buttons"
+    buttonsContainer.style.display = "flex"
+    buttonsContainer.style.gap = "10px"
+    buttonsContainer.style.marginTop = "10px"
+
+    // Create project link button
+    const projectLink = document.createElement("a")
+    projectLink.className = "project-link"
+    projectLink.href = project.url
+    projectLink.target = "_blank"
+    projectLink.rel = "noopener noreferrer"
+    projectLink.textContent = project.linkText
+
+    // Create GitHub link button
+    const githubLink = document.createElement("a")
+    githubLink.className = "project-link"
+    githubLink.style.backgroundColor = "#333"
+    githubLink.href = project.githubUrl || "https://github.com/Samuelheros"
+    githubLink.target = "_blank"
+    githubLink.rel = "noopener noreferrer"
+    githubLink.textContent = "GitHub"
+
+    // Add buttons to container
+    buttonsContainer.appendChild(projectLink)
+    buttonsContainer.appendChild(githubLink)
 
     header.appendChild(title)
     content.appendChild(header)
     content.appendChild(description)
-    content.appendChild(link)
+    content.appendChild(buttonsContainer)
 
     // Add image and content to card
     card.appendChild(imageContainer)

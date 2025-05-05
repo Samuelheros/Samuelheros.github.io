@@ -183,5 +183,21 @@
     </footer>
 
     <script src="script-fixed.js"></script>
+    <script>
+  // Ensure projects section is visible on mobile
+  document.addEventListener('DOMContentLoaded', function() {
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      projectsSection.style.display = 'block';
+      projectsSection.style.visibility = 'visible';
+    }
+    
+    // Make sure projects link is in mobile menu
+    const projectsLink = document.querySelector('a[href="#projects"]');
+    if (projectsLink) {
+      projectsLink.style.display = 'block';
+    }
+  });
+</script>
 </body>
 </html>

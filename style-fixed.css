@@ -713,6 +713,38 @@ footer {
     height: 36px;
     font-size: 1rem;
   }
+
+  /* Fix for projects section on mobile */
+  /* Existing styles */
+
+  /* Fix for project cards on mobile */
+  .project-card {
+    flex-direction: column;
+  }
+
+  .project-image-container {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Ensure projects section is visible */
+  #projects {
+    display: block;
+    visibility: visible;
+    z-index: 1;
+  }
+
+  /* Fix for carousel on mobile */
+  .carousel-container {
+    overflow: visible;
+    width: 100%;
+  }
+
+  .project-item {
+    min-width: 100%;
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -737,6 +769,21 @@ footer {
   .contact-link {
     width: 45%;
     margin-bottom: var(--spacing-md);
+  }
+
+  /* Additional mobile fixes */
+  /* Existing styles */
+
+  /* Ensure projects section is properly displayed */
+  #projects .section-content {
+    padding: var(--spacing-md);
+    overflow: visible;
+  }
+
+  /* Fix for project image on small screens */
+  .project-image {
+    max-height: 200px;
+    object-fit: cover;
   }
 }
 

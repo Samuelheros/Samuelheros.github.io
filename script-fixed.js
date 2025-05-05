@@ -94,6 +94,30 @@ function setupEventListeners() {
   })
 }
 
+// Make sure all nav links are properly handled in mobile view
+function checkMobileNavLinks() {
+  // Get all navigation links
+  const allNavLinks = document.querySelectorAll(".main-nav a")
+  const mobileNav = document.querySelector(".main-nav")
+
+  // Ensure all links are visible in mobile menu
+  if (window.innerWidth <= 768) {
+    allNavLinks.forEach((link) => {
+      link.style.display = "block"
+    })
+
+    // Make sure projects link is visible
+    const projectsLink = document.querySelector('a[href="#projects"]')
+    if (projectsLink) {
+      projectsLink.style.display = "block"
+    }
+  }
+}
+
+// Add to existing event listeners
+window.addEventListener("resize", checkMobileNavLinks)
+window.addEventListener("load", checkMobileNavLinks)
+
 // Load language data and update UI with fade effect
 async function loadLanguage(lang) {
   try {
@@ -244,6 +268,13 @@ function updateCertificationsList(certifications) {
 // Add this function after the updateCertificationsList function
 // Update projects carousel
 function updateProjectsCarousel(projects) {
+  // Ensure projects section is visible on mobile
+  const projectsSection = document.getElementById("projects")
+  if (projectsSection) {
+    projectsSection.style.display = "block"
+    projectsSection.style.visibility = "visible"
+  }
+
   const container = document.getElementById("projects-carousel")
   const indicators = document.getElementById("carousel-indicators")
 
@@ -332,6 +363,32 @@ function updateProjectsCarousel(projects) {
 // Add this function after the updateProjectsCarousel function
 // Initialize carousel functionality
 function initCarousel() {
+  // Ensure carousel is properly initialized for mobile
+  function adjustCarouselForMobile() {
+    const container = document.getElementById("projects-carousel")
+    const projectItems = container ? container.querySelectorAll(".project-item") : []
+
+    if (window.innerWidth <= 768) {
+      // Make sure all project items are visible on mobile
+      projectItems.forEach((item) => {
+        item.style.minWidth = "100%"
+        item.style.width = "100%"
+      })
+
+      // Reset transform to ensure first item is visible
+      if (container) {
+        container.style.transform = "translateX(0)"
+      }
+    }
+  }
+
+  // Call this function on window resize and load
+  window.addEventListener("resize", adjustCarouselForMobile)
+  window.addEventListener("load", adjustCarouselForMobile)
+
+  // Call it immediately when initializing carousel
+  adjustCarouselForMobile()
+
   const container = document.getElementById("projects-carousel")
   const indicators = document.querySelectorAll(".indicator")
   const prevBtn = document.getElementById("prev-project")
@@ -406,6 +463,7 @@ function updateContent(data) {
   updateCertificationsList(data.certifications.items)
   // Add this line to update projects
   updateProjectsCarousel(data.projects.items)
+  preloadProjectImages(data.projects.items)
 
   // --- Apply scroll reveal *after* content is fully updated ---
   // Find elements to animate (ensure they exist after update)
@@ -485,3 +543,22 @@ style.innerHTML = `
   */
 `
 document.head.appendChild(style)
+
+// Add error handling for image loading
+function preloadProjectImages(projects) {
+  if (!projects || !Array.isArray(projects)) return
+
+  projects.forEach((project) => {
+    if (project.image) {
+      const img = new Image()
+      img.src = project.image
+      img.onerror = () => {
+        console.error("Failed to preload image:", img.src)
+        // Try with absolute path if relative path fails
+        if (!img.src.startsWith("http")) {
+          img.src = window.location.origin + project.image
+        }
+      }
+    }
+  })
+}

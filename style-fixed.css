@@ -696,13 +696,6 @@ footer {
     display: flex;
   }
 
-  /* Fix for iOS-style mobile menu */
-  .main-nav {
-    background-color: var(--background-secondary);
-    border-top: 1px solid var(--border-color);
-    transition: background-color var(--transition-speed);
-  }
-
   /* iOS-style side menu */
   .main-nav {
     position: fixed;
@@ -721,47 +714,45 @@ footer {
     opacity: 1;
     pointer-events: auto;
     overflow-y: auto;
-    will-change: transform; /* Optimize for hardware acceleration */
   }
 
   .main-nav.active {
     transform: translateX(calc(-1 * var(--mobile-menu-width))); /* Slide in from right */
   }
 
-  /* Improve menu backdrop */
-  .menu-backdrop {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--backdrop-blur);
-    z-index: 998;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    will-change: opacity; /* Optimize for hardware acceleration */
+  .main-nav ul {
+    flex-direction: column;
+    padding: var(--spacing-md);
   }
 
+  .main-nav li {
+    margin: 0;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .main-nav a {
+    display: block;
+    padding: var(--spacing-md);
+    font-size: 1rem;
+    border-radius: var(--border-radius-small);
+  }
+
+  /* Show backdrop when menu is active */
   .menu-backdrop.active {
     display: block;
-    opacity: 1;
   }
 
-  /* Adjust body when menu is open - improve content shift */
+  /* Adjust body when menu is open */
   body.menu-open {
     overflow: hidden;
   }
 
-  /* Content shift when menu is open - smoother iOS-style transition */
+  /* Content shift when menu is open */
   body.menu-open main,
   body.menu-open header .container,
   body.menu-open footer .container {
     transform: translateX(calc(-1 * var(--mobile-menu-width) * 0.3)); /* Shift content slightly */
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform; /* Optimize for hardware acceleration */
   }
 
   .skills-content {

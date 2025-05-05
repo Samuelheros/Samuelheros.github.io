@@ -24,37 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Create backdrop for mobile menu
   createMenuBackdrop()
-
-  // Check mobile nav links on load
-  checkMobileNavLinks()
-
-  // Test if the menu is working properly
-  setTimeout(() => {
-    const mainNav = document.querySelector(".main-nav")
-    if (mainNav) {
-      // Force a reflow to ensure CSS transitions work properly
-      window.getComputedStyle(mainNav).transform
-    }
-  }, 100)
 })
 
-// Create backdrop element for mobile menu - improved for iOS-style
+// Create backdrop element for mobile menu
 function createMenuBackdrop() {
-  // Remove existing backdrop if it exists to prevent duplicates
-  const existingBackdrop = document.querySelector(".menu-backdrop")
-  if (existingBackdrop) {
-    existingBackdrop.remove()
-  }
-
   const backdrop = document.createElement("div")
   backdrop.className = "menu-backdrop"
   document.body.appendChild(backdrop)
 
   // Add click event to close menu when backdrop is clicked
-  backdrop.addEventListener("click", (e) => {
-    e.preventDefault() // Prevent default behavior
-    e.stopPropagation() // Stop event propagation
-
+  backdrop.addEventListener("click", () => {
     const menuToggle = document.querySelector(".menu-toggle")
     const mainNav = document.querySelector(".main-nav")
 
@@ -82,50 +61,44 @@ function setupEventListeners() {
     document.body.setAttribute("data-theme", this.checked ? "dark" : "light")
   })
 
-  // Mobile menu toggle - improved for iOS-style behavior
+  // Mobile menu toggle
   const menuToggle = document.querySelector(".menu-toggle")
   const mainNav = document.querySelector(".main-nav")
   const backdrop = document.querySelector(".menu-backdrop")
 
-  if (menuToggle && mainNav && backdrop) {
-    menuToggle.addEventListener("click", function (e) {
-      e.stopPropagation() // Prevent event bubbling
-      this.classList.toggle("active")
-      mainNav.classList.toggle("active")
-      backdrop.classList.toggle("active")
+  menuToggle.addEventListener("click", function () {
+    this.classList.toggle("active")
+    mainNav.classList.toggle("active")
+    backdrop.classList.toggle("active")
 
-      // Toggle body class for overflow control
-      document.body.classList.toggle("menu-open", mainNav.classList.contains("active"))
+    // Toggle body class for overflow control
+    document.body.classList.toggle("menu-open", mainNav.classList.contains("active"))
+  })
 
-      // Force browser reflow to ensure animations work properly
-      window.getComputedStyle(mainNav).transform
+  // Close mobile menu when clicking on a nav link
+  const navLinks = document.querySelectorAll(".main-nav a")
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      menuToggle.classList.remove("active")
+      mainNav.classList.remove("active")
+      backdrop.classList.remove("active")
+      document.body.classList.remove("menu-open") // Restore scrolling
     })
+  })
 
-    // Close mobile menu when clicking on a nav link
-    const navLinks = document.querySelectorAll(".main-nav a")
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        menuToggle.classList.remove("active")
-        mainNav.classList.remove("active")
-        backdrop.classList.remove("active")
-        document.body.classList.remove("menu-open") // Restore scrolling
-      })
-    })
-
-    // Close mobile menu when clicking outside
-    document.addEventListener("click", (event) => {
-      if (
-        mainNav.classList.contains("active") &&
-        !event.target.closest(".main-nav") &&
-        !event.target.closest(".menu-toggle")
-      ) {
-        menuToggle.classList.remove("active")
-        mainNav.classList.remove("active")
-        backdrop.classList.remove("active")
-        document.body.classList.remove("menu-open") // Restore scrolling
-      }
-    })
-  }
+  // Close mobile menu when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !event.target.closest(".main-nav") &&
+      !event.target.closest(".menu-toggle") &&
+      mainNav.classList.contains("active")
+    ) {
+      menuToggle.classList.remove("active")
+      mainNav.classList.remove("active")
+      backdrop.classList.remove("active")
+      document.body.classList.remove("menu-open") // Restore scrolling
+    }
+  })
 
   // Smooth scrolling for navigation links
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -189,8 +162,6 @@ function checkMobileNavLinks() {
   if (window.innerWidth <= 768) {
     allNavLinks.forEach((link) => {
       link.style.display = "block"
-      // Add iOS-style tap highlight
-      link.style.webkitTapHighlightColor = "transparent"
     })
 
     // Make sure projects link is visible

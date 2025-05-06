@@ -108,6 +108,7 @@ function initProjectsObserver() {
 
   observer.observe(projectsSection);
 }
+
 // Add touch swipe functionality for mobile carousel
 document.addEventListener("DOMContentLoaded", () => {
   // Add swipe functionality after other carousel functions are initialized
@@ -121,10 +122,13 @@ function addSwipeSupport() {
   if (!carousel) return;
 
   let touchStartX = 0;
+  let touchStartY = 0; // Añadido para detectar dirección vertical
   let touchEndX = 0;
   let isSwiping = false;
   let originalTransform = '';
   let currentTranslateX = 0;
+  let isScrollingVertically = false; // Para detectar scroll vertical
+  let isScrollingHorizontally = false; // Para detectar scroll horizontal
   
   // Get total number of projects
   const projectItems = carousel.querySelectorAll(".project-item");
@@ -143,6 +147,7 @@ function addSwipeSupport() {
   // Touch start event
   carousel.addEventListener("touchstart", (e) => {
     touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY; // Guardar posición Y inicial
     isSwiping = true;
     originalTransform = carousel.style.transform || 'translateX(0%)';
     
@@ -150,37 +155,48 @@ function addSwipeSupport() {
     const match = originalTransform.match(/translateX$$-?(\d+(?:\.\d+)?)%$$/);
     currentTranslateX = match ? -parseFloat(match[1]) : 0;
     
-    // Prevent default to avoid page scrolling while swiping
-    // but only if we're in a mobile view
-    if (window.innerWidth <= 768) {
-      e.preventDefault();
-    }
-  }, { passive: false });
+    // Resetear las banderas de dirección
+    isScrollingVertically = false;
+    isScrollingHorizontally = false;
+  }, { passive: true }); // Cambiar a passive: true para mejorar rendimiento
 
   // Touch move event - for visual feedback during swipe
   carousel.addEventListener("touchmove", (e) => {
     if (!isSwiping) return;
     
     const touchCurrentX = e.touches[0].clientX;
+    const touchCurrentY = e.touches[0].clientY;
     const diffX = touchCurrentX - touchStartX;
+    const diffY = touchCurrentY - touchStartY;
     
-    // Calculate how much to move (as a percentage of container width)
-    const movePercentage = (diffX / carousel.offsetWidth) * 100;
-    
-    // Apply transform with boundaries to prevent excessive swiping
-    const newTranslateX = Math.max(
-      -((totalProjects - 1) * 100), 
-      Math.min(0, currentTranslateX + movePercentage)
-    );
-    
-    carousel.style.transform = `translateX(${newTranslateX}%)`;
-    
-    // Prevent default to avoid page scrolling while swiping
-    // but only if we're in a mobile view and swiping horizontally
-    if (window.innerWidth <= 768 && Math.abs(diffX) > 10) {
-      e.preventDefault();
+    // Si aún no hemos determinado la dirección del desplazamiento
+    if (!isScrollingVertically && !isScrollingHorizontally) {
+      // Determinar si el desplazamiento es más horizontal o vertical
+      // Usamos un umbral de 5px para evitar detecciones accidentales
+      if (Math.abs(diffX) > Math.abs(diffY) + 5) {
+        isScrollingHorizontally = true;
+        e.preventDefault(); // Prevenir el scroll de la página solo para scroll horizontal
+      } else if (Math.abs(diffY) > Math.abs(diffX) + 5) {
+        isScrollingVertically = true;
+        return; // Permitir el scroll vertical de la página
+      }
     }
-  }, { passive: false });
+    
+    // Si estamos desplazándonos horizontalmente, mover el carrusel
+    if (isScrollingHorizontally) {
+      // Calculate how much to move (as a percentage of container width)
+      const movePercentage = (diffX / carousel.offsetWidth) * 100;
+      
+      // Apply transform with boundaries to prevent excessive swiping
+      const newTranslateX = Math.max(
+        -((totalProjects - 1) * 100), 
+        Math.min(0, currentTranslateX + movePercentage)
+      );
+      
+      carousel.style.transform = `translateX(${newTranslateX}%)`;
+      e.preventDefault(); // Prevenir el scroll de la página
+    }
+  }, { passive: false }); // Necesitamos passive: false para poder llamar a preventDefault()
 
   // Touch end event
   carousel.addEventListener("touchend", (e) => {
@@ -189,40 +205,51 @@ function addSwipeSupport() {
     touchEndX = e.changedTouches[0].clientX;
     isSwiping = false;
     
-    const diffX = touchEndX - touchStartX;
-    
-    // Determine if swipe was significant enough to change slide
-    // (at least 15% of container width)
-    const threshold = carousel.offsetWidth * 0.15;
-    
-    if (Math.abs(diffX) > threshold) {
-      if (diffX > 0) {
-        // Swiped right - go to previous slide
-        currentIndex = Math.max(0, currentIndex - 1);
-      } else {
-        // Swiped left - go to next slide
-        currentIndex = Math.min(totalProjects - 1, currentIndex + 1);
+    // Solo procesar el final del swipe si estábamos desplazándonos horizontalmente
+    if (isScrollingHorizontally) {
+      const diffX = touchEndX - touchStartX;
+      
+      // Determine if swipe was significant enough to change slide
+      // (at least 15% of container width)
+      const threshold = carousel.offsetWidth * 0.15;
+      
+      if (Math.abs(diffX) > threshold) {
+        if (diffX > 0) {
+          // Swiped right - go to previous slide
+          currentIndex = Math.max(0, currentIndex - 1);
+        } else {
+          // Swiped left - go to next slide
+          currentIndex = Math.min(totalProjects - 1, currentIndex + 1);
+        }
       }
+      
+      // Apply final transform with animation
+      carousel.style.transition = 'transform 0.3s ease';
+      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+      
+      // Update indicators
+      updateIndicators(currentIndex);
+      
+      // Reset transition after animation completes
+      setTimeout(() => {
+        carousel.style.transition = '';
+      }, 300);
     }
     
-    // Apply final transform with animation
-    carousel.style.transition = 'transform 0.3s ease';
-    carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-    
-    // Update indicators
-    updateIndicators(currentIndex);
-    
-    // Reset transition after animation completes
+    // Resetear las banderas de dirección después de un breve retraso
     setTimeout(() => {
-      carousel.style.transition = '';
-    }, 300);
-  });
+      isScrollingHorizontally = false;
+      isScrollingVertically = false;
+    }, 100);
+  }, { passive: true });
 
   // Cancel swipe on touch cancel
   carousel.addEventListener("touchcancel", () => {
     if (!isSwiping) return;
     
     isSwiping = false;
+    isScrollingHorizontally = false;
+    isScrollingVertically = false;
     
     // Restore original position with animation
     carousel.style.transition = 'transform 0.3s ease';
@@ -232,5 +259,5 @@ function addSwipeSupport() {
     setTimeout(() => {
       carousel.style.transition = '';
     }, 300);
-  });
+  }, { passive: true });
 }

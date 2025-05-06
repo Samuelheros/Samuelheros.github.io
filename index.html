@@ -138,9 +138,9 @@
                             <!-- Projects will be populated by JavaScript -->
                         </div>
                         <div class="carousel-controls">
-                            <button id="prev-project" class="carousel-control" aria-label="Previous project"><i class="fas fa-chevron-left"></i></button>
+                            <button id="prev-project" class="carousel-control"><i class="fas fa-chevron-left"></i></button>
                             <div class="carousel-indicators" id="carousel-indicators"></div>
-                            <button id="next-project" class="carousel-control" aria-label="Next project"><i class="fas fa-chevron-right"></i></button>
+                            <button id="next-project" class="carousel-control"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
@@ -197,96 +197,9 @@
     if (projectsLink) {
       projectsLink.style.display = 'block';
     }
-    
-    // Add swipe instruction for mobile users
-    if (window.innerWidth <= 768) {
-      const carouselContainer = document.querySelector('.carousel-container');
-      if (carouselContainer) {
-        const swipeHint = document.createElement('div');
-        swipeHint.className = 'swipe-hint';
-        swipeHint.innerHTML = '<i class="fas fa-hand-point-right"></i> Swipe to see more projects';
-        swipeHint.style.textAlign = 'center';
-        swipeHint.style.color = 'var(--text-tertiary)';
-        swipeHint.style.fontSize = '0.9rem';
-        swipeHint.style.padding = 'var(--spacing-sm) 0';
-        swipeHint.style.marginBottom = 'var(--spacing-sm)';
-        
-        const projectsContent = document.querySelector('#projects .section-content');
-        if (projectsContent) {
-          projectsContent.insertBefore(swipeHint, carouselContainer);
-          
-          // Auto-hide the hint after 5 seconds
-          setTimeout(() => {
-            swipeHint.style.opacity = '0';
-            swipeHint.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-              swipeHint.remove();
-            }, 500);
-          }, 5000);
-        }
-      }
-    }
-    
-    // Force recalculation of carousel after a short delay
-    setTimeout(function() {
-      // Trigger resize event to recalculate carousel
-      window.dispatchEvent(new Event('resize'));
-      
-      // Force update of indicators
-      const carousel = document.getElementById('projects-carousel');
-      if (carousel) {
-        // Ensure first item is visible
-        carousel.scrollLeft = 0;
-        
-        // Update indicators
-        const event = new Event('scroll');
-        carousel.dispatchEvent(event);
-      }
-    }, 500);
-    
-    // Add accessibility attributes to carousel controls
-    const prevBtn = document.getElementById('prev-project');
-    const nextBtn = document.getElementById('next-project');
-    const indicators = document.querySelectorAll('.indicator');
-    
-    if (prevBtn) {
-      prevBtn.setAttribute('aria-label', 'Previous project');
-      prevBtn.setAttribute('title', 'Previous project');
-    }
-    
-    if (nextBtn) {
-      nextBtn.setAttribute('aria-label', 'Next project');
-      nextBtn.setAttribute('title', 'Next project');
-    }
-    
-    indicators.forEach((indicator, index) => {
-      indicator.setAttribute('aria-label', `Go to project ${index + 1}`);
-      indicator.setAttribute('title', `Go to project ${index + 1}`);
-      indicator.setAttribute('role', 'button');
-      indicator.setAttribute('tabindex', '0');
-      
-      // Add keyboard support
-      indicator.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          indicator.click();
-        }
-      });
-    });
-    
-    // Add keyboard navigation for the carousel
-    document.addEventListener('keydown', (e) => {
-      if (document.activeElement.closest('#projects')) {
-        if (e.key === 'ArrowLeft' && prevBtn) {
-          e.preventDefault();
-          prevBtn.click();
-        } else if (e.key === 'ArrowRight' && nextBtn) {
-          e.preventDefault();
-          nextBtn.click();
-        }
-      }
-    });
   });
 </script>
+<link rel="stylesheet" href="floating-carousel.css">
+<script src="carousel-controls.js"></script>
 </body>
 </html>

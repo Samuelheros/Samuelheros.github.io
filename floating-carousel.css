@@ -1,0 +1,60 @@
+/* Floating Carousel Controls for Mobile */
+.floating-carousel-controls {
+  display: none; /* Hidden by default */
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--background-secondary);
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 10px 15px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+  min-width: 120px;
+}
+
+.floating-carousel-controls.visible {
+  opacity: 1;
+}
+
+.floating-carousel-controls .carousel-control {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.floating-carousel-controls .carousel-control:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Hide original carousel controls on mobile */
+@media (max-width: 768px) {
+  .carousel-controls {
+    display: none; /* Hide the original controls on mobile */
+  }
+
+  .floating-carousel-controls {
+    display: flex; /* Show floating controls on mobile */
+  }
+
+  /* Ensure projects section is visible */
+  #projects {
+    display: block !important;
+    visibility: visible !important;
+  }
+}

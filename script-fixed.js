@@ -24,9 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Create backdrop for mobile menu
   createMenuBackdrop()
-
-  // Setup refined carousel with persistent controls
-  setupRefinedCarousel()
 })
 
 // Create backdrop element for mobile menu
@@ -47,36 +44,6 @@ function createMenuBackdrop() {
       document.body.classList.remove("menu-open")
     }
   })
-}
-
-// Setup refined carousel with persistent controls
-function setupRefinedCarousel() {
-  const projectsSection = document.getElementById("projects")
-  const carouselControls = document.querySelector(".carousel-controls")
-
-  if (!projectsSection || !carouselControls) return
-
-  // Function to check if projects section is in viewport
-  function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect()
-    return rect.top < (window.innerHeight || document.documentElement.clientHeight) && rect.bottom > 0
-  }
-
-  // Function to update controls visibility
-  function updateControlsVisibility() {
-    if (isElementInViewport(projectsSection)) {
-      carouselControls.classList.add("visible")
-    } else {
-      carouselControls.classList.remove("visible")
-    }
-  }
-
-  // Add scroll event listener to update controls visibility
-  window.addEventListener("scroll", updateControlsVisibility, { passive: true })
-  window.addEventListener("resize", updateControlsVisibility, { passive: true })
-
-  // Initial visibility check
-  updateControlsVisibility()
 }
 
 // Setup all event listeners
@@ -183,20 +150,6 @@ function setupEventListeners() {
       { passive: true },
     )
   })
-
-  // Add this at the end of the function
-  // Ensure projects section is visible on mobile
-  const projectsSection = document.getElementById("projects")
-  const projectsLink = document.querySelector('a[href="#projects"]')
-
-  if (projectsSection) {
-    projectsSection.style.display = "block"
-    projectsSection.style.visibility = "visible"
-  }
-
-  if (projectsLink) {
-    projectsLink.style.display = "block"
-  }
 }
 
 // Make sure all nav links are properly handled in mobile view
@@ -507,9 +460,6 @@ function updateProjectsCarousel(projects) {
     const indicator = document.createElement("div")
     indicator.className = "indicator" + (index === 0 ? " active" : "")
     indicator.setAttribute("data-index", index)
-    indicator.setAttribute("role", "button")
-    indicator.setAttribute("aria-label", `Go to project ${index + 1}`)
-    indicator.setAttribute("tabindex", "0")
     indicators.appendChild(indicator)
   })
 
@@ -520,112 +470,74 @@ function updateProjectsCarousel(projects) {
 // Add this function after the updateProjectsCarousel function
 // Initialize carousel functionality
 function initCarousel() {
-  const container = document.getElementById("projects-carousel")
-  if (!container) return
-
-  const projectItems = container.querySelectorAll(".project-item")
-  const indicators = document.querySelectorAll(".indicator")
-  const prevBtn = document.getElementById("prev-project")
-  const nextBtn = document.getElementById("next-project")
-
-  if (!indicators.length || !prevBtn || !nextBtn) return
-
   // Ensure carousel is properly initialized for mobile
   function adjustCarouselForMobile() {
-    if (!container) return
+    const container = document.getElementById("projects-carousel")
+    const projectItems = container ? container.querySelectorAll(".project-item") : []
 
     if (window.innerWidth <= 768) {
-      // Mobile setup
-      container.style.transform = "none" // Reset any transform
-
-      // Make sure all project items are visible and properly sized
+      // Make sure all project items are visible on mobile
       projectItems.forEach((item) => {
         item.style.minWidth = "100%"
         item.style.width = "100%"
       })
 
-      // Setup touch-based carousel for mobile
-      setupTouchCarousel()
-    } else {
-      // Desktop setup - use transform-based navigation
-      setupDesktopCarousel()
-    }
-  }
-
-  // New function to handle desktop carousel separately
-  function setupDesktopCarousel() {
-    let currentIndex = 0
-    const totalProjects = projectItems.length
-
-    // Update carousel position
-    function updateCarousel() {
-      if (!container) return
-
-      container.style.transform = `translateX(-${currentIndex * 100}%)`
-
-      // Update indicators
-      indicators.forEach((indicator, index) => {
-        indicator.classList.toggle("active", index === currentIndex)
-        indicator.setAttribute("aria-current", index === currentIndex ? "true" : "false")
-      })
-    }
-
-    // Event listeners for controls
-    prevBtn.addEventListener("click", () => {
-      currentIndex = (currentIndex - 1 + totalProjects) % totalProjects
-      updateCarousel()
-    })
-
-    nextBtn.addEventListener("click", () => {
-      currentIndex = (currentIndex + 1) % totalProjects
-      updateCarousel()
-    })
-
-    // Event listeners for indicators
-    indicators.forEach((indicator, index) => {
-      indicator.addEventListener("click", () => {
-        currentIndex = index
-        updateCarousel()
-      })
-
-      // Keyboard support for indicators
-      indicator.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault()
-          currentIndex = index
-          updateCarousel()
-        }
-      })
-    })
-
-    // Keyboard navigation
-    document.addEventListener("keydown", (e) => {
-      if (document.activeElement.closest("#projects")) {
-        if (e.key === "ArrowLeft") {
-          e.preventDefault()
-          currentIndex = (currentIndex - 1 + totalProjects) % totalProjects
-          updateCarousel()
-        } else if (e.key === "ArrowRight") {
-          e.preventDefault()
-          currentIndex = (currentIndex + 1) % totalProjects
-          updateCarousel()
-        }
+      // Reset transform to ensure first item is visible
+      if (container) {
+        container.style.transform = "translateX(0)"
       }
-    })
-
-    // Initialize position
-    updateCarousel()
+    }
   }
 
-  // Call this function on window resize with debounce
-  let resizeTimeout
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout)
-    resizeTimeout = setTimeout(adjustCarouselForMobile, 100)
+  // Call this function on window resize and load
+  window.addEventListener("resize", adjustCarouselForMobile)
+  window.addEventListener("load", adjustCarouselForMobile)
+
+  // Call it immediately when initializing carousel
+  adjustCarouselForMobile()
+
+  const container = document.getElementById("projects-carousel")
+  const indicators = document.querySelectorAll(".indicator")
+  const prevBtn = document.getElementById("prev-project")
+  const nextBtn = document.getElementById("next-project")
+
+  if (!container || !indicators.length || !prevBtn || !nextBtn) return
+
+  let currentIndex = 0
+  const projectItems = container.querySelectorAll(".project-item")
+  const totalProjects = projectItems.length
+
+  // Update carousel position
+  function updateCarousel() {
+    container.style.transform = `translateX(-${currentIndex * 100}%)`
+
+    // Update indicators
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle("active", index === currentIndex)
+    })
+  }
+
+  // Event listeners for controls
+  prevBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + totalProjects) % totalProjects
+    updateCarousel()
   })
 
-  // Initial setup
-  adjustCarouselForMobile()
+  nextBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % totalProjects
+    updateCarousel()
+  })
+
+  // Event listeners for indicators
+  indicators.forEach((indicator) => {
+    indicator.addEventListener("click", () => {
+      currentIndex = Number.parseInt(indicator.getAttribute("data-index"))
+      updateCarousel()
+    })
+  })
+
+  // Initialize position
+  updateCarousel()
 
   // Add to scroll reveal
   if (window.scrollRevealObserver) {
@@ -634,313 +546,6 @@ function initCarousel() {
       window.scrollRevealObserver.observe(item)
     })
   }
-}
-
-// Update the setupTouchCarousel function to fix the indicator synchronization issues
-function setupTouchCarousel() {
-  const container = document.getElementById("projects-carousel")
-  const indicators = document.querySelectorAll(".indicator")
-  const prevBtn = document.getElementById("prev-project")
-  const nextBtn = document.getElementById("next-project")
-
-  if (!container || !indicators.length) return
-
-  let currentIndex = 0
-  const projectItems = container.querySelectorAll(".project-item")
-  const totalProjects = projectItems.length
-
-  // More reliable method to update indicators based on scroll position
-  function updateIndicators() {
-    if (!container) return
-
-    // Calculate which project is most visible
-    const containerWidth = container.clientWidth
-    const scrollPosition = container.scrollLeft
-
-    // Use a more precise calculation with threshold
-    const scrollRatio = scrollPosition / containerWidth
-    currentIndex = Math.round(scrollRatio)
-
-    // Ensure currentIndex is within bounds
-    currentIndex = Math.max(0, Math.min(currentIndex, totalProjects - 1))
-
-    // Update indicators with a clear active state
-    indicators.forEach((indicator, index) => {
-      indicator.classList.toggle("active", index === currentIndex)
-      indicator.setAttribute("aria-current", index === currentIndex ? "true" : "false")
-    })
-  }
-
-  // Improved scroll event with better throttling
-  let scrollTimeout
-  container.addEventListener(
-    "scroll",
-    () => {
-      // Clear previous timeout to prevent multiple rapid updates
-      clearTimeout(scrollTimeout)
-
-      // Set a new timeout for better performance
-      scrollTimeout = setTimeout(() => {
-        updateIndicators()
-      }, 50)
-    },
-    { passive: true },
-  )
-
-  // Enhanced touch event listeners for iOS-style interaction
-  let startX,
-    startScrollLeft,
-    isDragging = false
-
-  container.addEventListener(
-    "touchstart",
-    (e) => {
-      startX = e.touches[0].clientX
-      startScrollLeft = container.scrollLeft
-      isDragging = true
-      container.style.scrollBehavior = "auto" // Disable smooth scrolling during touch
-    },
-    { passive: true },
-  )
-
-  container.addEventListener(
-    "touchmove",
-    (e) => {
-      if (!isDragging) return
-      // No need to manually adjust scroll position - let native scrolling handle it
-    },
-    { passive: true },
-  )
-
-  container.addEventListener(
-    "touchend",
-    () => {
-      if (!isDragging) return
-
-      isDragging = false
-      container.style.scrollBehavior = "smooth" // Re-enable smooth scrolling
-
-      // Snap to nearest project with improved calculation
-      const containerWidth = container.clientWidth
-      const scrollPosition = container.scrollLeft
-      const targetIndex = Math.round(scrollPosition / containerWidth)
-
-      // Ensure targetIndex is within bounds
-      const safeTargetIndex = Math.max(0, Math.min(targetIndex, totalProjects - 1))
-
-      // Scroll to the target project
-      container.scrollTo({
-        left: safeTargetIndex * containerWidth,
-        behavior: "smooth",
-      })
-
-      // Update current index and indicators after scrolling completes
-      setTimeout(() => {
-        currentIndex = safeTargetIndex
-        updateIndicators()
-      }, 300) // Wait for scroll animation to complete
-    },
-    { passive: true },
-  )
-
-  // Improved button handlers with better boundary checks
-  if (prevBtn && nextBtn) {
-    prevBtn.addEventListener("click", () => {
-      currentIndex = Math.max(0, currentIndex - 1)
-      scrollToProject(currentIndex)
-    })
-
-    nextBtn.addEventListener("click", () => {
-      currentIndex = Math.min(totalProjects - 1, currentIndex + 1)
-      scrollToProject(currentIndex)
-    })
-  }
-
-  // Enhanced indicator click handlers
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener("click", () => {
-      currentIndex = index
-      scrollToProject(currentIndex)
-    })
-
-    // Add keyboard support for indicators
-    indicator.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault()
-        currentIndex = index
-        scrollToProject(currentIndex)
-      }
-    })
-  })
-
-  // Improved scrollToProject function with error handling
-  function scrollToProject(index) {
-    if (!container) return
-
-    // Ensure index is within bounds
-    const safeIndex = Math.max(0, Math.min(index, totalProjects - 1))
-    const containerWidth = container.clientWidth
-
-    // Scroll with smooth behavior
-    container.scrollTo({
-      left: safeIndex * containerWidth,
-      behavior: "smooth",
-    })
-
-    // Update indicators after scrolling completes
-    setTimeout(() => {
-      updateIndicators()
-    }, 300)
-  }
-
-  // Add keyboard navigation
-  document.addEventListener("keydown", (e) => {
-    if (document.activeElement.closest("#projects")) {
-      if (e.key === "ArrowLeft" && prevBtn) {
-        e.preventDefault()
-        prevBtn.click()
-      } else if (e.key === "ArrowRight" && nextBtn) {
-        e.preventDefault()
-        nextBtn.click()
-      }
-    }
-  })
-
-  // Add window resize handler to recalculate positions
-  window.addEventListener("resize", () => {
-    // Recalculate and scroll to current project after resize
-    setTimeout(() => {
-      scrollToProject(currentIndex)
-    }, 100)
-  })
-
-  // Initial update to ensure indicators match initial position
-  setTimeout(updateIndicators, 100)
-}
-
-// Add this function after the setupTouchCarousel function
-function setupPersistentControls() {
-  const projectsSection = document.getElementById("projects")
-  const carouselControls = document.querySelector(".carousel-controls")
-
-  if (!projectsSection || !carouselControls) return
-
-  // Store original position
-  const originalRect = carouselControls.getBoundingClientRect()
-  const originalTop = originalRect.top
-  let isSticky = false
-  let controlsContainer = null
-
-  // Create a wrapper for the controls when they become fixed
-  function createControlsContainer() {
-    if (controlsContainer) return controlsContainer
-
-    controlsContainer = document.createElement("div")
-    controlsContainer.className = "fixed-controls-container"
-    controlsContainer.style.position = "fixed"
-    controlsContainer.style.bottom = "20px"
-    controlsContainer.style.left = "0"
-    controlsContainer.style.width = "100%"
-    controlsContainer.style.display = "flex"
-    controlsContainer.style.justifyContent = "center"
-    controlsContainer.style.zIndex = "100"
-    controlsContainer.style.pointerEvents = "none"
-    controlsContainer.style.opacity = "0"
-    controlsContainer.style.transition = "opacity 0.3s ease"
-
-    document.body.appendChild(controlsContainer)
-    return controlsContainer
-  }
-
-  // Function to check if controls should be fixed
-  function updateControlsVisibility() {
-    const projectsRect = projectsSection.getBoundingClientRect()
-    const controlsRect = carouselControls.getBoundingClientRect()
-    const windowHeight = window.innerHeight
-
-    // Check if projects section is visible and controls would be out of view
-    const projectsVisible = projectsRect.top < windowHeight && projectsRect.bottom > 0
-    const controlsOutOfView = controlsRect.bottom > windowHeight || controlsRect.top < 0
-
-    if (projectsVisible) {
-      if (!controlsContainer) {
-        controlsContainer = createControlsContainer()
-
-        // Clone the controls for the fixed container
-        const clonedControls = carouselControls.cloneNode(true)
-        clonedControls.style.position = "static"
-        clonedControls.style.pointerEvents = "auto"
-        controlsContainer.appendChild(clonedControls)
-
-        // Add event listeners to cloned controls
-        const prevBtn = clonedControls.querySelector("#prev-project")
-        const nextBtn = clonedControls.querySelector("#next-project")
-        const indicators = clonedControls.querySelectorAll(".indicator")
-
-        if (prevBtn && nextBtn) {
-          prevBtn.addEventListener("click", () => {
-            const originalPrev = document.getElementById("prev-project")
-            if (originalPrev) originalPrev.click()
-          })
-
-          nextBtn.addEventListener("click", () => {
-            const originalNext = document.getElementById("next-project")
-            if (originalNext) originalNext.click()
-          })
-        }
-
-        indicators.forEach((indicator, index) => {
-          indicator.addEventListener("click", () => {
-            const originalIndicators = document.querySelectorAll(".carousel-indicators .indicator")
-            if (originalIndicators[index]) originalIndicators[index].click()
-          })
-        })
-      }
-
-      // Show fixed controls when original controls are out of view
-      if (controlsOutOfView && projectsRect.bottom > 100) {
-        controlsContainer.style.opacity = "1"
-        isSticky = true
-      } else {
-        controlsContainer.style.opacity = "0"
-        isSticky = false
-      }
-    } else if (controlsContainer) {
-      controlsContainer.style.opacity = "0"
-      isSticky = false
-    }
-  }
-
-  // Listen for scroll events
-  let scrollTimeout
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout)
-      }
-
-      scrollTimeout = setTimeout(() => {
-        updateControlsVisibility()
-      }, 10) // Small timeout for better performance
-    },
-    { passive: true },
-  )
-
-  // Listen for resize events
-  let resizeTimeout
-  window.addEventListener("resize", () => {
-    if (resizeTimeout) {
-      clearTimeout(resizeTimeout)
-    }
-
-    resizeTimeout = setTimeout(() => {
-      updateControlsVisibility()
-    }, 100)
-  })
-
-  // Initial check
-  setTimeout(updateControlsVisibility, 500)
 }
 
 // --- Scroll Reveal and Language Fade Functionality ---

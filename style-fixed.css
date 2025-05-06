@@ -30,10 +30,6 @@
   --header-height: 60px;
   /* Mobile Menu Width */
   --mobile-menu-width: 280px;
-
-  /* RGB values for background colors */
-  --background-primary-rgb: 242, 242, 247;
-  --background-secondary-rgb: 255, 255, 255;
 }
 
 /* Dark Theme Colors */
@@ -48,9 +44,6 @@
   --accent-color-muted: #64d2ff;
   --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   --backdrop-blur: rgba(0, 0, 0, 0.5);
-
-  --background-primary-rgb: 28, 28, 30;
-  --background-secondary-rgb: 44, 44, 46;
 }
 
 /* Reset & Base Styles */
@@ -626,40 +619,19 @@ footer {
   color: white;
 }
 
-/* Refined Carousel Controls - Always Visible */
 .carousel-controls {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: var(--spacing-md);
   gap: var(--spacing-md);
-  z-index: 100;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: rgba(var(--background-secondary-rgb), 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 32px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  opacity: 0;
-  pointer-events: none;
-  border: 1px solid rgba(var(--border-color), 0.2);
-}
-
-/* Show controls only when projects section is visible */
-.carousel-controls.visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
 }
 
 .carousel-control {
-  background-color: var(--background-secondary);
+  background: none;
+  border: none;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -667,56 +639,31 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-  -webkit-tap-highlight-color: transparent;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 10;
+  background-color: var(--background-primary);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 .carousel-control:hover {
   background-color: var(--accent-color);
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.carousel-control:active {
-  transform: scale(0.95);
 }
 
 .carousel-indicators {
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .indicator {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: var(--border-color);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-  position: relative;
+  transition: background-color var(--transition-speed);
 }
 
 .indicator.active {
-  width: 16px;
-  border-radius: 8px;
   background-color: var(--accent-color);
-}
-
-/* Increase touch target size without changing visual size */
-.indicator::after {
-  content: "";
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
 }
 
 /* Backdrop for mobile menu */
@@ -816,17 +763,14 @@ footer {
     gap: var(--spacing-md);
   }
 
-  /* Smaller carousel controls for mobile */
   .carousel-controls {
-    padding: var(--spacing-xs) var(--spacing-md);
     gap: var(--spacing-sm);
-    bottom: 15px;
   }
 
   .carousel-control {
     width: 36px;
     height: 36px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   /* Fix for projects section on mobile */
@@ -900,27 +844,6 @@ footer {
     max-height: 200px;
     object-fit: cover;
   }
-
-  /* Smaller carousel controls for very small screens */
-  .carousel-controls {
-    bottom: 10px;
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-
-  .carousel-control {
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
-  }
-
-  .indicator {
-    width: 6px;
-    height: 6px;
-  }
-
-  .indicator.active {
-    width: 12px;
-  }
 }
 
 /* Animation for menu toggle */
@@ -974,85 +897,4 @@ input:focus {
 .scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0); /* Termina en su posición original */
-}
-
-/* iOS-style carousel for mobile */
-@media (max-width: 768px) {
-  /* Make carousel container scrollable horizontally */
-  .projects-carousel {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* iOS-style momentum scrolling */
-    scroll-snap-type: x mandatory; /* Snap to each project */
-    scrollbar-width: none; /* Hide scrollbar on Firefox */
-    -ms-overflow-style: none; /* Hide scrollbar on IE/Edge */
-    padding-bottom: var(--spacing-md); /* Add padding for indicators */
-    position: relative; /* Ensure proper stacking context */
-  }
-
-  /* Hide scrollbar on WebKit browsers */
-  .projects-carousel::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Adjust carousel container for horizontal scrolling */
-  .carousel-container {
-    display: flex;
-    width: auto; /* Let content determine width */
-    transform: none !important; /* Prevent JS transform */
-    transition: none; /* Remove transition for native scrolling */
-    scroll-behavior: smooth; /* Enable smooth scrolling */
-  }
-
-  /* Make project items snap to viewport */
-  .project-item {
-    flex: 0 0 100%;
-    scroll-snap-align: center; /* Center for better snapping */
-    scroll-snap-stop: always;
-    padding: var(--spacing-md);
-    margin-right: var(--spacing-xs); /* Small gap between items */
-    width: 100%; /* Ensure full width */
-    min-width: 100%; /* Ensure minimum width */
-    box-sizing: border-box; /* Include padding in width calculation */
-  }
-
-  /* Enhanced indicator styles for mobile */
-  .indicator {
-    width: 6px;
-    height: 6px;
-  }
-
-  .indicator.active {
-    width: 14px;
-  }
-
-  /* Add swipe hint styling */
-  .swipe-hint {
-    text-align: center;
-    color: var(--text-tertiary);
-    font-size: 0.9rem;
-    padding: var(--spacing-sm) 0;
-    margin-bottom: var(--spacing-sm);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      opacity: 0.6;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0.6;
-    }
-  }
-}
-
-/* Fix for iOS devices */
-@supports (-webkit-touch-callout: none) {
-  .carousel-controls {
-    /* Use padding-bottom to avoid issues with bottom safe area on iOS */
-    bottom: env(safe-area-inset-bottom, 10px);
-    padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px));
-  }
 }

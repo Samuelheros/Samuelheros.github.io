@@ -144,6 +144,14 @@
         "linkText": "Visit Project",
         "image": "/images/retroracerimagen.webp",
         "githubUrl": "https://github.com/Samuelheros"
+      },
+      {
+        "title": "3D Retro Snake",
+        "description": "3D Retro Snake, my small tribute to the classic snake game, but with a three-dimensional twist and a lot of color! Immerse yourself in retro-futuristic worlds where guiding your hungry snake through increasingly exciting challenges is key. I hope you enjoy it!",
+        "image": "/images/3dretrosnakeimagen.webp",
+        "url": "https://3d-retro-snake-by-samuel.netlify.app/",
+        "githubUrl": "https://github.com/Samuelheros",
+        "linkText": "View Project"
       }
     ]
   },

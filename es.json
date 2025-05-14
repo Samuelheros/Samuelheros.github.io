@@ -11,9 +11,9 @@
   },
   "about": {
     "title": "Introducción",
-    "name": "Samuel E. Villegas A.",
-    "location": "Región Metropolitana, Santiago, Chile",
-    "content": "Mi trayectoria se caracteriza por la búsqueda constante de innovación y mejora a través de la formación. Poseo títulos técnicos de Vanderbilt (Prompt Engineering) y Yale (Mercados Financieros), una Licenciatura en Ciencias (UEP. Colegio Humboldt) y capacitación en áreas clave del marketing digital y gestión de proyectos. Experto en apalancamiento tecnológico (\"leveraging\") para potenciar resultados."
+    "name": "Acerca de mi",
+    "location": "📍Región Metropolitana, Santiago, Chile",
+    "content": "Me encanta personificar la constante busqueda de innovación y mejora a través de la formación y la tecnología que caracteriza al ser humano del siglo XXI. Poseo títulos profesionales de Vanderbilt University (Prompt Engineering y AI Agent Developer) y Yale University (Mercados Financieros), completé el High School en UEP. Colegio Humboldt y estoy capacitado en áreas clave del marketing digital (Santander Open Academy) y gestión de proyectos (Microsoft & LinkedIn). Experto en apalancamiento tecnológico (\"leveraging\") para obtener mejores resultados en sólo una fracción del tiempo."
   },
   "skills": {
     "title": "Habilidades",
@@ -87,6 +87,12 @@
         "url": "https://www.coursera.org/account/accomplishments/specialization/3NTECNVK9JYD"
       },
       {
+        "title": "Digital Marketing and E-Commerce",
+        "institution": "Google",
+        "type": "Formación Profesional de Grado Superior",
+        "url": "https://www.coursera.org/account/accomplishments/specialization/3YZTR2U0N07X"
+      },
+      {
         "title": "Prompt Engineering",
         "institution": "Vanderbilt University",
         "type": "Formación Profesional de Grado Medio",
@@ -131,7 +137,7 @@
     "items": [
       {
         "title": "AllPay",
-        "description": "AllPay es una plataforma de pago integral que centraliza transacciones para servicios móviles, hogar, deudas y más en un solo lugar. Con una interfaz intuitiva y segura, permite gestionar pagos de forma rápida y eficiente, optimizando la experiencia del usuario y garantizando transparencia en cada transacción - Proyecto en desarrollo y en venta.",
+        "description": "AllPay es una plataforma de pago integral que centraliza transacciones para servicios móviles, hogar, deudas y más en un solo lugar. Con una interfaz intuitiva y segura, permite gestionar pagos de forma rápida y eficiente, optimizando la experiencia del usuario y garantizando transparencia en cada transacción. [Plataforma en desarrollo, disponible para la venta]",
         "url": "https://all-pay.netlify.app/",
         "linkText": "Visitar Proyecto",
         "image": "/images/allpay.png",
@@ -151,11 +157,14 @@
         "image": "/images/3dretrosnakeimagen.webp",
         "url": "https://3d-retro-snake-by-samuel.netlify.app/",
         "githubUrl": "https://github.com/Samuelheros",
-        "linkText": "Ver Proyecto"
+        "linkText": "Visitar Proyecto"
       }
     ]
   },
   "contact": {
     "title": "Contacto"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
   }
 }

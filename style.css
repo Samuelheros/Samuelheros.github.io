@@ -1,601 +1,1183 @@
-/* Base Styles & iOS-inspired Design System */
+/* Variables para colores y espaciado (inspirado en iOS) */
 :root {
-    /* Light Theme Colors */
-    --background-primary: #f2f2f7;
-    --background-secondary: #ffffff;
-    --text-primary: #000000;
-    --text-secondary: #3a3a3c;
-    --text-tertiary: #6e6e73;
-    --border-color: #d1d1d6;
-    --accent-color: #007aff;
-    --accent-color-muted: #5ac8fa;
-    --success-color: #34c759;
-    --danger-color: #ff3b30;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    
-    /* iOS UI Properties */
-    --border-radius-small: 8px;
-    --border-radius-medium: 12px;
-    --border-radius-large: 16px;
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-xxl: 48px;
-    --transition-speed: 0.3s;
-    
-    /* Header Height */
-    --header-height: 60px;
+  /* Espaciado y bordes (comunes para ambos temas) */
+  --spacing-unit: 20px; /* Unidad base de espaciado */
+  --spacing-large: calc(var(--spacing-unit) * 2); /* 40px */
+  --spacing-small: calc(var(--spacing-unit) / 2); /* 10px */
+  --border-radius-small: 8px;
+  --border-radius-large: 12px;
+
+  /* Tema claro (valores por defecto) */
+  --color-background: #f2f2f7; /* Gris muy claro de fondo */
+  --color-surface: #ffffff; /* Blanco para tarjetas y elementos elevados */
+  --color-text-primary: #1c1c1e; /* Negro oscuro para texto principal */
+  --color-text-secondary: #636366; /* Gris oscuro para texto secundario/detalles */
+  --color-accent-blue: #007aff; /* Azul del sistema iOS */
+  --color-divider: #c6c6c8; /* Gris para líneas divisorias */
+  --color-header-bg: rgba(255, 255, 255, 0.8); /* Fondo del header */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* Sombra suave para elevación */
+  --switch-bg: #e9e9eb; /* Color del switch inactivo */
+
+  /* Variables RGB para usar con opacidad */
+  --color-accent-blue-rgb: 0, 122, 255;
 }
 
-/* Dark Theme Colors */
+/* Tema oscuro */
 [data-theme="dark"] {
-    --background-primary: #1c1c1e;
-    --background-secondary: #2c2c2e;
-    --text-primary: #ffffff;
-    --text-secondary: #ebebf0;
-    --text-tertiary: #aeaeb2;
-    --border-color: #38383a;
-    --accent-color: #0a84ff;
-    --accent-color-muted: #64d2ff;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --color-background: #000000; /* Negro para el fondo */
+  --color-surface: #1c1c1e; /* Gris muy oscuro para tarjetas */
+  --color-text-primary: #ffffff; /* Blanco para texto principal */
+  --color-text-secondary: #aeaeb2; /* Gris claro para texto secundario */
+  --color-accent-blue: #0a84ff; /* Azul más brillante para el tema oscuro */
+  --color-divider: #38383a; /* Gris oscuro para líneas divisorias */
+  --color-header-bg: rgba(0, 0, 0, 0.8); /* Fondo del header en modo oscuro */
+  --shadow-subtle: 0 1px 3px rgba(255, 255, 255, 0.05), 0 1px 2px rgba(255, 255, 255, 0.03); /* Sombra sutil para modo oscuro */
+  --switch-bg: #38383a; /* Color del switch inactivo en modo oscuro */
+
+  /* Variables RGB para usar con opacidad */
+  --color-accent-blue-rgb: 10, 132, 255;
 }
 
-/* Reset & Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
+/* Reset básico y tipografía */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    background-color: var(--background-primary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    transition: background-color var(--transition-speed), color var(--transition-speed);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  overflow-x: hidden; /* Prevenir scroll horizontal no deseado */
+  word-wrap: break-word; /* Evitar que palabras largas rompan el diseño */
 }
 
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-md);
+/* Transición suave para cambios de tema */
+body,
+body * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: var(--spacing-md);
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* Mejor manejo del padding y borde */
 }
 
-h1 {
-    font-size: 2rem;
-}
-
-h2 {
-    font-size: 1.75rem;
-    color: var(--text-primary);
-}
-
-h3 {
-    font-size: 1.25rem;
-    color: var(--text-secondary);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+  margin-top: 0;
+  margin-bottom: var(--spacing-unit);
+  font-weight: 600; /* Un poco más de peso para los títulos */
 }
 
 p {
-    margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-unit);
 }
 
 a {
-    color: var(--accent-color);
-    text-decoration: none;
-    transition: color var(--transition-speed);
+  color: var(--color-accent-blue);
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
 }
 
 a:hover {
-    color: var(--accent-color-muted);
+  color: #005bb5; /* Tono más oscuro al pasar el ratón */
 }
 
-/* Header & Navigation */
-header {
-    position: sticky;
-    top: 0;
-    background-color: var(--background-secondary);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: background-color var(--transition-speed);
+ul {
+  padding: 0;
+  list-style: none;
 }
 
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: var(--header-height);
+/* Contenedor principal para centrar contenido y limitar ancho */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-unit);
 }
 
-.header-left {
-    display: flex;
-    flex-direction: column;
+/* Estilo para todas las secciones */
+.section {
+  padding: var(--spacing-large) 0; /* Espaciado arriba y abajo */
+  /* Efecto de fade-in inicial (se gestionará con JS) */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.header-left .name {
-    font-size: 1.25rem;
-    margin-bottom: 0;
+.section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.header-left .title {
-    font-size: 0.85rem;
-    color: var(--text-tertiary);
-    margin-bottom: 0;
+/* Encabezado fijo tipo iOS con desenfoque */
+.ios-header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: var(--color-header-bg); /* Usa la variable para el fondo */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque */
+  -webkit-backdrop-filter: blur(10px); /* Soporte para Safari */
+  z-index: 1000; /* Asegura que esté por encima del contenido */
+  box-shadow: var(--shadow-subtle); /* Sombra sutil en la parte inferior */
+  padding: var(--spacing-small) 0; /* Espaciado interno */
+  border-bottom: 1px solid var(--color-divider); /* Línea sutil en la parte inferior */
 }
 
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
+.ios-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-/* iOS-style Toggle Switch */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 51px;
-    height: 31px;
+.ios-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.ios-header .desktop-nav ul {
+  display: flex;
+  gap: var(--spacing-unit); /* Espacio entre elementos de navegación */
+  margin: 0;
+  flex-wrap: wrap;
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #e9e9eb;
-    transition: .4s;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--spacing-xs);
+.ios-header .desktop-nav a {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--color-text-secondary); /* Color menos prominente por defecto */
+  transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+  padding-bottom: 5px;
+  position: relative;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 27px;
-    width: 27px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    transition: .4s;
-    z-index: 1;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.ios-header .desktop-nav a:hover {
+  color: var(--color-accent-blue); /* Azul al pasar el ratón */
 }
 
-input:checked + .slider {
-    background-color: var(--accent-color);
+/* Mejorar los estilos para el indicador de elemento activo en el menú desktop */
+.ios-header .desktop-nav a.active {
+  color: var(--color-accent-blue);
+  font-weight: 600;
+  position: relative;
 }
 
-input:checked + .slider:before {
-    transform: translateX(20px);
+/* Mejorar la visibilidad de la línea inferior para el elemento activo */
+.ios-header .desktop-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-accent-blue);
+  transition: width 0.3s ease;
 }
 
-.slider.round {
-    border-radius: 34px;
+.ios-header .desktop-nav a:hover::after {
+  width: 50%;
 }
 
-.slider.round:before {
-    border-radius: 50%;
+.ios-header .desktop-nav a.active::after {
+  width: 100%;
+  height: 3px; /* Hacer la línea un poco más gruesa para mayor visibilidad */
 }
 
-/* Theme Toggle Icons */
-.theme-toggle .fa-moon,
-.theme-toggle .fa-sun {
-    color: var(--text-tertiary);
-    font-size: 14px;
-    position: relative;
-    z-index: 0;
+/* Añadir línea inferior para indicar elemento activo en el menú web */
+
+/* Switch de idioma estilo iOS */
+.language-toggle-container {
+  display: flex;
+  align-items: center;
+  margin: 0 var(--spacing-unit);
 }
 
-.theme-toggle .fa-moon {
-    margin-right: 5px;
+/* Contenedor para ambos switches */
+.toggles-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-unit);
+  margin: 0 var(--spacing-unit);
 }
 
-.theme-toggle .fa-sun {
-    margin-left: 5px;
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
 }
 
-/* Language Toggle */
-.language-toggle {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
+.theme-label {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-secondary);
+  margin: 0 var(--spacing-small);
+}
+
+/* Ajuste para los iconos SVG */
+.theme-label svg {
+  stroke: var(--color-text-secondary);
 }
 
 .language-label {
-    font-size: 0.85rem;
-    color: var(--text-tertiary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: 0 var(--spacing-small);
 }
 
-/* Mobile Menu Toggle */
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: var(--spacing-xs);
-    flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 20px;
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
 }
 
-.menu-toggle span {
-    display: block;
-    height: 2px;
-    width: 100%;
-    background-color: var(--text-primary);
-    transition: transform var(--transition-speed), opacity var(--transition-speed);
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-/* Main Navigation */
-.main-nav {
-    background-color: var(--background-secondary);
-    border-top: 1px solid var(--border-color);
-    transition: background-color var(--transition-speed);
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--switch-bg); /* Usa la variable para el fondo del switch */
+  transition: .4s;
 }
 
-.main-nav ul {
-    display: flex;
-    list-style: none;
-    justify-content: space-between;
-    padding: var(--spacing-sm) 0;
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.main-nav li {
-    margin: 0 var(--spacing-xs);
+input:checked + .slider {
+  background-color: var(--color-accent-blue);
 }
 
-.main-nav a {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius-small);
-    transition: background-color var(--transition-speed), color var(--transition-speed);
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--color-accent-blue);
 }
 
-.main-nav a:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: var(--accent-color);
+input:checked + .slider:before {
+  transform: translateX(22px);
 }
 
-[data-theme="dark"] .main-nav a:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+.slider.round {
+  border-radius: 34px;
 }
 
-/* Main Content Sections */
-.section {
-    padding: var(--spacing-xl) 0;
-    border-bottom: 1px solid var(--border-color);
+.slider.round:before {
+  border-radius: 50%;
 }
 
-.section:last-child {
-    border-bottom: none;
+/* Estilo para ítems de experiencia y educación */
+.experience-item,
+.education-item {
+  background-color: var(--color-surface);
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius-large);
+  margin-bottom: var(--spacing-unit);
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.3s ease;
 }
 
-.section-header {
-    margin-bottom: var(--spacing-lg);
+/* Añadir efecto hover para las tarjetas de educación */
+.education-item:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  background-color: var(--color-surface);
+  position: relative;
+  z-index: 1;
 }
 
-.section-content {
-    background-color: var(--background-secondary);
-    border-radius: var(--border-radius-medium);
-    padding: var(--spacing-lg);
-    box-shadow: var(--card-shadow);
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+/* Añadir un efecto de brillo sutil en el borde al hacer hover */
+.education-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-blue-rgb), 0);
+  transition: box-shadow 0.3s ease;
+  pointer-events: none;
 }
 
-/* About Section */
-.profile-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--spacing-lg);
+.education-item:hover::after {
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-blue-rgb), 0.2);
 }
 
-.profile-details {
-    flex: 1;
+/* Añadir efecto hover para los enlaces dentro de las tarjetas de educación */
+.education-item .project-link {
+  position: relative;
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: inline-block;
 }
 
-.profile-details h3 {
-    margin-bottom: var(--spacing-xs);
+.education-item:hover .project-link {
+  transform: translateX(4px);
 }
 
-.location {
-    color: var(--text-tertiary);
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
+/* Añadir un pequeño efecto de escala al hacer clic en la tarjeta */
+.education-item:active {
+  transform: translateY(-2px) scale(0.99);
+  transition: transform 0.1s ease;
 }
 
-/* Skills Section */
-.skills-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
+.experience-item h3,
+.education-item h3 {
+  margin-bottom: var(--spacing-small);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.experience-item .company,
+.education-item .institution {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  margin-bottom: var(--spacing-small);
+}
+
+.experience-item .dates,
+.education-item .dates {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-unit);
+}
+
+.experience-item ul {
+  padding-left: var(--spacing-unit); /* Indentación para la lista */
+  list-style: disc; /* Viñetas */
+  color: var(--color-text-primary);
+}
+
+.experience-item li {
+  margin-bottom: var(--spacing-small);
+}
+
+/* Estilo para habilidades */
+.skills-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-unit);
+}
+
+.skills-group {
+  background-color: var(--color-surface);
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-subtle);
 }
 
 .skills-list {
-    list-style: none;
-    margin-top: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap; /* Permitir que las etiquetas se envuelvan en múltiples líneas */
+  gap: var(--spacing-small); /* Espacio entre etiquetas */
 }
 
-.skills-list li {
-    margin-bottom: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background-color: var(--background-primary);
-    border-radius: var(--border-radius-small);
-    transition: background-color var(--transition-speed);
+.skill-tag {
+  display: inline-block;
+  background-color: rgba(var(--color-accent-blue-rgb, 0, 122, 255), 0.1); /* Fondo azul muy claro con opacidad */
+  color: var(--color-accent-blue);
+  padding: var(--spacing-small) calc(var(--spacing-small) * 1.5); /* Padding interior */
+  border-radius: var(--border-radius-small);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-/* Experience Section */
-.experience-item {
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.experience-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.experience-header {
-    margin-bottom: var(--spacing-md);
-}
-
-.experience-title {
-    font-weight: 600;
-    margin-bottom: var(--spacing-xs);
-}
-
-.experience-company {
-    color: var(--accent-color);
-    font-weight: 500;
-    margin-bottom: var(--spacing-xs);
-}
-
-.experience-period, .experience-location {
-    color: var(--text-tertiary);
-    font-size: 0.9rem;
-    margin-bottom: var(--spacing-xs);
-}
-
-.responsibilities-list {
-    list-style: none;
-    margin-top: var(--spacing-md);
-}
-
-.responsibilities-list li {
-    margin-bottom: var(--spacing-sm);
-    padding-left: var(--spacing-lg);
-    position: relative;
-}
-
-.responsibilities-list li:before {
-    content: "•";
-    color: var(--accent-color);
-    position: absolute;
-    left: 0;
-}
-
-/* Education Section */
-.education-item {
-    margin-bottom: var(--spacing-md);
-    padding: var(--spacing-md);
-    background-color: var(--background-primary);
-    border-radius: var(--border-radius-small);
-    transition: background-color var(--transition-speed), transform var(--transition-speed);
-}
-
-.education-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--card-shadow);
-}
-
-.education-item a {
-    display: block;
-    color: var(--text-primary);
-    text-decoration: none;
-}
-
-.education-item a:hover {
-    color: var(--accent-color);
-}
-
-.education-title {
-    font-weight: 600;
-    margin-bottom: var(--spacing-xs);
-}
-
-.education-institution {
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-xs);
-}
-
-.education-type {
-    color: var(--text-tertiary);
-    font-size: 0.9rem;
-}
-
-/* Certifications Section */
+/* Estilo para certificaciones */
 .certifications-list {
-    list-style: none;
+  background-color: var(--color-surface);
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-subtle);
 }
 
 .certifications-list li {
-    margin-bottom: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background-color: var(--background-primary);
-    border-radius: var(--border-radius-small);
-    transition: background-color var(--transition-speed);
+  padding: var(--spacing-small) 0;
+  border-bottom: 1px solid var(--color-divider);
 }
 
-/* Contact Section */
-.contact-content {
-    text-align: center;
+.certifications-list li:last-child {
+  border-bottom: none;
 }
 
-.contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-lg);
+/* Estilo para la cuadrícula de proyectos */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Columnas responsivas */
+  gap: var(--spacing-unit); /* Espacio entre tarjetas */
 }
 
-.contact-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-primary);
-    transition: transform var(--transition-speed), color var(--transition-speed);
+.project-card {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-large);
+  overflow: hidden; /* Asegura que la imagen respete el borde redondeado */
+  box-shadow: var(--shadow-subtle);
+  display: flex;
+  flex-direction: column; /* Apila contenido verticalmente */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.contact-link i {
-    font-size: 1.5rem;
-    margin-bottom: var(--spacing-xs);
+.project-card:hover {
+  transform: translateY(-5px); /* Ligero movimiento hacia arriba al pasar el ratón */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
 }
 
-.contact-link:hover {
-    transform: translateY(-3px);
-    color: var(--accent-color);
+.project-image {
+  width: 100%;
+  height: 200px; /* Altura fija para las imágenes (ajustar si es necesario) */
+  object-fit: cover; /* Cubre el área manteniendo la relación de aspecto */
+  display: block;
 }
 
-/* Footer */
-footer {
-    background-color: var(--background-secondary);
-    padding: var(--spacing-lg) 0;
-    text-align: center;
-    color: var(--text-tertiary);
-    font-size: 0.9rem;
-    transition: background-color var(--transition-speed);
+.project-info {
+  padding: var(--spacing-unit);
+  flex-grow: 1; /* Permite que la información ocupe el espacio restante */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Responsive Design */
+.project-info h3 {
+  margin-bottom: var(--spacing-small);
+  font-size: 1.3rem;
+}
+
+.project-description {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-unit);
+  flex-grow: 1; /* Permite que la descripción ocupe espacio si es larga */
+}
+
+.project-link {
+  display: inline-block; /* Para que se apliquen padding y margin */
+  margin-top: auto; /* Empuja el enlace hacia abajo */
+  font-weight: 500;
+  color: var(--color-accent-blue);
+}
+
+/* Añadir después de los estilos de .project-link */
+
+/* Estilos para el carrusel de proyectos en móvil */
+.projects-carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 30px; /* Espacio para los indicadores */
+  margin-top: var(--spacing-unit);
+}
+
+.projects-carousel {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1); /* Curva de animación estilo iOS */
+  /* Modificado: permitir scroll vertical y horizontal */
+  touch-action: manipulation; /* Permite scroll vertical y gestos horizontales */
+  will-change: transform; /* Optimización de rendimiento */
+  width: 100%; /* Asegurar que el carrusel ocupe todo el ancho disponible */
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  padding: 0 var(--spacing-small);
+  box-sizing: border-box;
+  min-width: 100%; /* Asegurar que cada slide ocupe al menos el 100% del ancho */
+  overflow: hidden; /* Evitar que el contenido se desborde */
+}
+
+/* Indicadores de página estilo iOS */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.carousel-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-divider);
+  transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+  background-color: var(--color-accent-blue);
+  width: 20px; /* Indicador activo más largo */
+  border-radius: 4px; /* Más redondeado para el activo */
+}
+
+/* Ajustes responsivos para el carrusel */
+@media (min-width: 769px) {
+  .projects-carousel-container {
+    display: none; /* Ocultar carrusel en desktop */
+  }
+
+  .projects-grid {
+    display: grid; /* Mostrar grid en desktop */
+  }
+}
+
 @media (max-width: 768px) {
-    .header-left .title {
-        display: none;
-    }
-    
-    .menu-toggle {
-        display: flex;
-    }
-    
-    .main-nav {
-        display: none;
-        position: absolute;
-        top: var(--header-height);
-        left: 0;
-        width: 100%;
-        border-top: 1px solid var(--border-color);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .main-nav.active {
-        display: block;
-    }
-    
-    .main-nav ul {
-        flex-direction: column;
-        padding: 0;
-    }
-    
-    .main-nav li {
-        margin: 0;
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .main-nav li:last-child {
-        border-bottom: none;
-    }
-    
-    .main-nav a {
-        display: block;
-        padding: var(--spacing-md);
-    }
-    
-    .skills-content {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-links {
-        gap: var(--spacing-md);
-    }
+  .projects-grid {
+    display: none; /* Ocultar grid en móvil */
+  }
+
+  .projects-carousel-container {
+    display: block; /* Mostrar carrusel en móvil */
+  }
+
+  /* Ajustes para el carrusel en móvil */
+  .project-card {
+    margin: 0; /* Eliminar margen para el carrusel */
+    height: 100%; /* Asegurar altura completa */
+  }
+
+  /* Efecto de escala para tarjetas no activas */
+  .carousel-slide {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .carousel-slide:not(.active) {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
 }
 
-@media (max-width: 480px) {
-    .header-container {
-        height: auto;
-        padding: var(--spacing-sm) var(--spacing-md);
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .header-right {
-        width: 100%;
-        justify-content: space-between;
-        margin-top: var(--spacing-sm);
-    }
-    
-    .section-content {
-        padding: var(--spacing-md);
-    }
-    
-    .contact-link {
-        width: 45%;
-        margin-bottom: var(--spacing-md);
-    }
+/* Modificar las animaciones de rebote para hacerlas más sutiles y similares a iOS */
+@keyframes bounceBack {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(10px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  70% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
-/* Animation for menu toggle */
-.menu-toggle.active span:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
+@keyframes bounceForward {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  70% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
-.menu-toggle.active span:nth-child(2) {
+/* Elementos de animación de rebote */
+.bounce-back-element {
+  animation: bounceBack 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.bounce-forward-element {
+  animation: bounceForward 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Estilo para contacto */
+#contact .contact-info {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-unit);
+}
+
+/* Estilos para los iconos de contacto */
+.contact-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+  stroke: var(--color-accent-blue);
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--spacing-unit);
+  margin-bottom: var(--spacing-small);
+  padding: 8px 16px;
+  background-color: rgba(var(--color-accent-blue-rgb), 0.1);
+  border-radius: var(--border-radius-small);
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.2);
+  transform: translateY(-2px);
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-unit);
+}
+
+.social-links {
+  display: flex;
+  gap: var(--spacing-unit); /* Espacio entre enlaces sociales */
+  flex-wrap: wrap;
+}
+
+.social-link {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-accent-blue);
+}
+
+/* Pie de página */
+footer {
+  text-align: center;
+  padding: var(--spacing-unit) 0;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-large);
+}
+
+/* Estilos para la sección About */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit);
+}
+
+.about-info {
+  background-color: var(--color-surface);
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-subtle);
+}
+
+.about-info h3 {
+  margin-bottom: var(--spacing-small);
+  font-size: 1.3rem;
+}
+
+/* Botón de menú para móvil */
+.menu-button {
+  display: none; /* Oculto por defecto, visible solo en móvil */
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 8px;
+  margin-left: 10px;
+  border-radius: 50%;
+}
+
+.menu-button:hover {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.1);
+}
+
+/* Sidebar para móvil */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -320px; /* Aumentar el ancho */
+  width: 320px;
+  height: 100%;
+  background-color: var(--color-surface);
+  z-index: 2000;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+.sidebar-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--color-divider);
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.close-sidebar {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.close-sidebar:hover {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.1);
+}
+
+.mobile-nav {
+  padding: 15px 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mejorar los estilos para el indicador de elemento activo en el menú móvil */
+.mobile-nav a {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 12px 15px;
+  border-radius: var(--border-radius-small);
+  transition: all 0.2s ease;
+  color: var(--color-text-primary);
+  position: relative; /* Asegurar que position sea relative para el posicionamiento del pseudo-elemento */
+}
+
+.mobile-nav a.active {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.15);
+  color: var(--color-accent-blue);
+  font-weight: 600;
+  transform: translateX(5px);
+}
+
+/* Corregir el indicador lateral para elementos activos en el sidebar */
+.mobile-nav a.active::before {
+  opacity: 1; /* Aumentar la opacidad del icono cuando está activo */
+}
+
+.mobile-nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--color-accent-blue);
+  border-radius: 0 4px 4px 0;
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.mobile-nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 15px;
+}
+
+.mobile-nav a {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 12px 15px;
+  border-radius: var(--border-radius-small);
+  transition: all 0.2s ease;
+  color: var(--color-text-primary);
+}
+
+.mobile-nav a:hover {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.1);
+  transform: translateX(5px);
+}
+
+.mobile-nav a.active {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.15);
+  color: var(--color-accent-blue);
+  font-weight: 600;
+  transform: translateX(5px);
+}
+
+/* Añadir indicador lateral más visible para elementos activos en el sidebar */
+
+/* Añadir iconos al menú móvil */
+.mobile-nav a::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.8;
+}
+
+.mobile-nav li:nth-child(1) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E");
+}
+
+.mobile-nav li:nth-child(2) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 14 4-4'/%3E%3Cpath d='M3.34 19a10 10 0 1 1 17.32 0'/%3E%3C/svg%3E");
+}
+
+.mobile-nav li:nth-child(3) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='4' rx='2' ry='2'/%3E%3Cline x1='16' x2='16' y1='2' y2='6'/%3E%3Cline x1='8' x2='8' y1='2' y2='6'/%3E%3Cline x1='3' x2='21' y1='10' y2='10'/%3E%3Cpath d='M8 14h.01'/%3E%3Cpath d='M12 14h.01'/%3E%3Cpath d='M16 14h.01'/%3E%3Cpath d='M8 18h.01'/%3E%3Cpath d='M12 18h.01'/%3E%3Cpath d='M16 18h.01'/%3E%3C/svg%3E");
+}
+
+.mobile-nav li:nth-child(4) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 10v6M2 10l10-5 10 5-10 5z'/%3E%3Cpath d='M6 12v5c3 3 9 3 12 0v-5'/%3E%3C/svg%3E");
+}
+
+.mobile-nav li:nth-child(5) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h3.8a2 2 0 0 0 1.4-.6L12 4.6a2 2 0 0 1 1.4-.6H20a2 2 0 0 1 2 2v2.4Z'/%3E%3Cpath d='M8 13h8'/%3E%3Cpath d='M8 17h8'/%3E%3C/svg%3E");
+}
+
+.mobile-nav li:nth-child(6) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 7a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7Z'/%3E%3Cpath d='M9 12h6'/%3E%3Cpath d='M12 9v6'/%3E%3C/svg%3E");
+}
+
+.mobile-nav li:nth-child(7) a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2'/%3E%3Crect width='18' height='18' x='3' y='4' rx='2'/%3E%3Ccircle cx='12' cy='10' r='2'/%3E%3Cline x1='8' x2='8' y1='2' y2='4'/%3E%3Cline x1='16' x2='16' y1='2' y2='4'/%3E%3C/svg%3E");
+}
+
+/* Añadir sección de ajustes al sidebar */
+.sidebar-settings {
+  padding: 20px;
+  border-top: 1px solid var(--color-divider);
+  margin-top: auto;
+}
+
+.sidebar-settings-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.sidebar-settings-label {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.sidebar-settings-label svg {
+  margin-right: 10px;
+  stroke: var(--color-accent-blue);
+}
+
+/* Ajustar el toggle de tema para alinearlo con el toggle de idioma */
+.sidebar-settings-item:nth-child(2) .theme-toggle-container {
+  margin-right: 0;
+  padding-right: 0;
+  width: 100px; /* Ancho fijo para alinear con el toggle de idioma */
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Ajustar el contenedor de toggle de tema en el sidebar para que no esté tan a la derecha */
+.sidebar-settings .theme-toggle-container {
+  align-self: flex-start;
+  margin-left: 30px; /* Alinear con el toggle de idioma */
+}
+
+/* Mejorar la animación del overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Mejorar el botón de menú */
+.menu-button {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 8px;
+  margin-left: 10px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.menu-button:hover {
+  background-color: rgba(var(--color-accent-blue-rgb), 0.1);
+  transform: scale(1.1);
+}
+
+.menu-button:active {
+  transform: scale(0.95);
+}
+
+/* Añadir efecto de ripple a los elementos del menú */
+.mobile-nav a {
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-nav a::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(var(--color-accent-blue-rgb), 0.3);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.mobile-nav a:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0) translate(-50%, -50%);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20) translate(-50%, -50%);
     opacity: 0;
+  }
 }
 
-.menu-toggle.active span:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
+/* Añadir indicador de sección activa */
+.mobile-nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--color-accent-blue);
+  border-radius: 0 4px 4px 0;
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+/* Ajustes para mostrar/ocultar elementos según el tamaño de pantalla */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .ios-header .container {
+    flex-direction: row; /* Mantener en fila para móvil con el nuevo diseño */
+    justify-content: space-between;
+    text-align: left;
+    flex-wrap: nowrap;
+  }
+
+  /* Ocultar solo los toggles de idioma y tema EN EL HEADER, pero mantener el contenedor visible */
+  .ios-header .language-toggle-container,
+  .ios-header .theme-toggle-container {
+    display: none;
+  }
+
+  /* Mantener el contenedor de toggles visible para que el botón de menú sea visible */
+  .toggles-container {
+    display: flex;
+    margin: 0;
+    align-items: center;
+  }
+
+  /* Asegurar que los toggles del sidebar permanezcan visibles */
+  .sidebar-settings .language-toggle-container,
+  .sidebar-settings .theme-toggle-container {
+    display: flex;
+  }
 }
 
-/* Transition effects */
-.fade-in {
-    animation: fadeIn 0.5s ease-in;
+@media (min-width: 769px) {
+  .mobile-nav {
+    display: none;
+  }
+
+  .sidebar,
+  .sidebar-overlay {
+    display: none;
+  }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+/* Prevenir scroll cuando el sidebar está abierto */
+body.sidebar-open {
+  overflow: hidden;
 }
 
-/* iOS-style focus states */
-button:focus, a:focus, input:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+/* --- Media Queries para Responsividad --- */
+
+/* Teléfonos pequeños y medianos */
+@media (max-width: 768px) {
+  .ios-header h1 {
+    margin-bottom: 0; /* Eliminar margen inferior */
+    font-size: 1.3rem;
+  }
+
+  .language-toggle-container,
+  .theme-toggle-container {
+    margin: 0 5px;
+  }
+
+  .language-label,
+  .theme-label {
+    margin: 0 2px;
+  }
+
+  .ios-switch {
+    width: 40px;
+    height: 24px;
+  }
+
+  .slider:before {
+    height: 20px;
+    width: 20px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(16px);
+  }
+
+  .section {
+    padding: var(--spacing-unit) 0; /* Reducir padding en móviles */
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr; /* Una sola columna en móviles */
+  }
+
+  .project-image {
+    height: 180px; /* Ajustar altura de imagen en móviles */
+  }
+
+  .skills-container {
+    grid-template-columns: 1fr; /* Una sola columna en móviles */
+  }
+}
+
+/* Teléfonos muy pequeños */
+@media (max-width: 480px) {
+  :root {
+    --spacing-unit: 15px; /* Reducir un poco el espaciado general */
+  }
+
+  .ios-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .ios-header nav a {
+    font-size: 0.95rem;
+  }
+
+  .experience-item,
+  .education-item,
+  .project-card,
+  .skill-tag {
+    padding: var(--spacing-unit); /* Ajustar padding */
+  }
+
+  .project-image {
+    height: 150px; /* Ajustar altura de imagen en móviles pequeños */
+  }
+}
+
+/* Asegurar que la sección de contacto tenga suficiente altura para activar el scroll */
+#contact {
+  min-height: 50vh; /* Altura mínima para asegurar que ocupe suficiente espacio */
+  padding-bottom: 100px; /* Añadir padding inferior para dar más espacio */
+}
+
+/* Ajustar el footer para que no interfiera con la sección de contacto */
+footer {
+  text-align: center;
+  padding: var(--spacing-unit) 0;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-top: 0; /* Eliminar el margen superior */
 }
